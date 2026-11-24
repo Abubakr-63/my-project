@@ -37,8 +37,7 @@ export async function signOut(locale: string) {
   if (!hasLocale(routing.locales, locale)) redirect(adminLoginPath(routing.defaultLocale));
   let failed = false;
   try {
-    // A verified non-admin can also end their own session.
-    const { client } = await getAdminAccess();
+    const client = await createAdminClient();
     const { error } = await client.auth.signOut({ scope: "local" });
     failed = !!error;
   } catch {

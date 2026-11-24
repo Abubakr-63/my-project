@@ -14,9 +14,8 @@ export async function createAdminClient() {
       setAll(cookiesToSet) {
         try {
           for (const { name, value, options } of cookiesToSet) store.set(name, value, options);
-        } catch (error) {
+        } catch {
           // Server Components cannot write cookies. The admin proxy handles refresh.
-          if (!(error instanceof Error) || !error.message.startsWith("Cookies can only be modified")) throw error;
         }
       },
     },

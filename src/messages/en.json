@@ -131,8 +131,7 @@
     "minimumAmount": "The minimum order amount is {price}.",
     "retry": "Try again",
     "nameError": "Enter a name up to 100 characters.",
-    "phoneError": "Enter a phone number with 7 to 20 digits.",
-    "website": "Website"
+    "phoneError": "Enter a phone number with 7 to 20 digits."
   },
   "OrderSuccess": {
     "accepted": "Order #{orderNumber} accepted. We’ll contact you.",

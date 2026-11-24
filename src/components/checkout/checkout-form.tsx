@@ -120,7 +120,6 @@ export function CheckoutForm({ locale }: { locale: StoreLocale }) {
         autoComplete="off"
         tabIndex={-1}
         aria-hidden="true"
-        aria-label={t("website")}
         className="absolute -left-[10000px] top-0"
       />
       <p role="alert">{error && t(error)}</p>

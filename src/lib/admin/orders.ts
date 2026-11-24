@@ -12,7 +12,7 @@ export function isOrderStatus(value: unknown): value is OrderStatus {
 }
 
 export function orderFilters(params: Record<string, string | string[] | undefined>) {
-  const page = typeof params.page === "string" && /^[1-9][0-9]{0,6}$/.test(params.page) ? Number(params.page) : 1;
+  const page = typeof params.page === "string" && /^[1-9][0-9]{0,3}$/.test(params.page) ? Number(params.page) : 1;
   const status: OrderStatus | "all" = isOrderStatus(params.status) ? params.status : "all";
   const query = typeof params.q === "string" ? params.q.trim() : "";
   const digits = query.replace(/[^0-9]/g, "");
