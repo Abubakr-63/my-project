@@ -6,7 +6,6 @@ const withNextIntl = createNextIntlPlugin("./src/lib/request.ts");
 const storageImages = productImagePattern(process.env.NEXT_PUBLIC_SUPABASE_URL);
 
 const nextConfig: NextConfig = {
-  agentRules: false,
   images: { remotePatterns: storageImages ? [storageImages] : [] },
 };
 

@@ -18,9 +18,14 @@ export async function AdminNav({ locale }: { locale: StoreLocale }) {
   const t = await getTranslations({ locale, namespace: "Admin" });
   return (
     <nav aria-label={t("navigation")} className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3">
-      <Link href="/admin/orders" prefetch={false} className="inline-flex min-h-11 items-center rounded px-2 font-semibold underline underline-offset-4 focus-visible:outline-2">
-        {t("orders")}
-      </Link>
+      <div className="flex flex-wrap gap-1">
+        {(["orders", "products", "categories", "settings"] as const).map((section) => (
+          <Link key={section} href={`/admin/${section}`} prefetch={false}
+            className="inline-flex min-h-11 items-center rounded px-2 font-semibold underline underline-offset-4 focus-visible:outline-2">
+            {t(section)}
+          </Link>
+        ))}
+      </div>
       <SignOutForm locale={locale} />
     </nav>
   );
