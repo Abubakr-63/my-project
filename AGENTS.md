@@ -10,3 +10,4 @@
 - Use the session-aware Supabase client only in `src/app/[locale]/admin` and its admin helpers. The proxy refreshes that session on admin routes.
 - Every admin Server Action re-checks `is_admin()` for the verified user before granting admin access.
 - Never use the Supabase service role key.
+- All admin forms validate on the server; product deletion is blocked when orders exist (FK restrict, SQLSTATE 23503).

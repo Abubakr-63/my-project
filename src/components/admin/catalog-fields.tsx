@@ -24,7 +24,7 @@ export async function SlugField({ value }: { value?: string }) {
   const t = await getTranslations("Admin");
   return (
     <label className="block">{t("slug")}
-      <input name="slug" defaultValue={value ?? ""} required maxLength={100}
+      <input name="slug" defaultValue={value ?? ""} required minLength={2} maxLength={60}
         pattern="[a-z0-9]+(?:-[a-z0-9]+)*" className={fieldClass} />
     </label>
   );

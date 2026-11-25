@@ -31,18 +31,20 @@ export async function ProductForm({ product, categories, locale }: {
           </select>
         </label>
         <label>{t("unitPrice")}
-          <input type="number" name="price_per_pair" min={0} max={9999999999.99} step="0.01" required
+          <input type="number" name="price_per_pair" min="0.01" max={1000000} step="0.01" required
             defaultValue={product?.price_per_pair} className={fieldClass} />
         </label>
         <label>{t("pairsPerPack")}
-          <input type="number" name="pairs_per_pack" min={1} max={2147483647} required
+          <input type="number" name="pairs_per_pack" min={1} max={100} required
             defaultValue={product?.pairs_per_pack} className={fieldClass} />
         </label>
         <label>{t("minPacks")}
           <input type="number" name="min_packs" min={1} max={10000} required defaultValue={product?.min_packs ?? 1} className={fieldClass} />
         </label>
         <label>{t("sizeRange")}
-          <input name="size_range" maxLength={80} required defaultValue={product?.size_range ?? ""} className={fieldClass} />
+          <input name="size_range" maxLength={20} pattern="[0-9]{2,3}(-[0-9]{2,3})?" required
+            aria-describedby="admin-size-range-hint" defaultValue={product?.size_range ?? ""} className={fieldClass} />
+          <span id="admin-size-range-hint" className="mt-1 block text-sm text-stone-600">{t("sizeRangeHint")}</span>
         </label>
       </div>
       <div className="grid gap-3 sm:grid-cols-3">

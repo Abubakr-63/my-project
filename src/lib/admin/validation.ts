@@ -19,8 +19,8 @@ function names(form: FormData) {
 }
 
 function slug(form: FormData) {
-  const value = field(form, "slug", 100);
-  return value && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) ? value : null;
+  const value = field(form, "slug", 60);
+  return value && value.length >= 2 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) ? value : null;
 }
 
 function integer(form: FormData, key: string, min: number, max: number) {
@@ -44,17 +44,17 @@ export function validateProduct(form: FormData) {
   const season = form.get("season");
   const seasons: readonly Season[] = ["spring_autumn", "summer", "winter", "all"];
   const validSeason = seasons.find((candidate) => candidate === season);
-  const price = field(form, "price_per_pair", 13);
-  const pairs_per_pack = integer(form, "pairs_per_pack", 1, 2147483647);
+  const price = field(form, "price_per_pair", 10);
+  const pairs_per_pack = integer(form, "pairs_per_pack", 1, 100);
   const min_packs = integer(form, "min_packs", 1, MAX_PACKS_PER_LINE);
-  const size_range = field(form, "size_range", 80);
+  const size_range = field(form, "size_range", 20);
   const description_ru = field(form, "description_ru", 5000);
   const description_tg = field(form, "description_tg", 5000);
   const description_en = field(form, "description_en", 5000);
 
   if (!labels || !value || !isCartId(category_id) || !validSeason || !price ||
-    !/^\d{1,10}(\.\d{1,2})?$/.test(price) || pairs_per_pack === null || min_packs === null ||
-    !size_range || description_ru === null || description_tg === null || description_en === null) return null;
+    !/^\d{1,7}(\.\d{1,2})?$/.test(price) || Number(price) <= 0 || Number(price) > 1000000 || pairs_per_pack === null || min_packs === null ||
+    (!size_range || !/^[0-9]{2,3}(-[0-9]{2,3})?$/.test(size_range)) || description_ru === null || description_tg === null || description_en === null) return null;
 
   return {
     ...labels, slug: value, category_id, season: validSeason, price_per_pair: Number(price),
@@ -63,21 +63,35 @@ export function validateProduct(form: FormData) {
   };
 }
 
+const colorImagePrefix = "/storage/v1/object/public/product-images/";
+
+export function colorImagePath(input: string, supabaseUrl: string | undefined) {
+  const host = supabaseUrl ? URL.parse(supabaseUrl)?.host : undefined;
+  const url = URL.parse(input);
+  if (!url || url.protocol !== "https:" || !host || url.host !== host ||
+    url.username || url.password || url.search || url.hash ||
+    !url.pathname.startsWith(colorImagePrefix) || url.pathname === colorImagePrefix) return null;
+
+  try {
+    const path = decodeURIComponent(url.pathname.slice(colorImagePrefix.length));
+    if (path.split("/").some((segment) => !segment || segment === "." || segment === "..") ||
+      /[\\\p{Cc}]/u.test(path)) return null;
+    return path;
+  } catch {
+    return null;
+  }
+}
+
 export function validateColor(form: FormData, supabaseUrl: string | undefined) {
   const labels = names(form);
   const sort_order = integer(form, "sort_order", 0, 2147483647);
-  const images = field(form, "image_urls", 20000);
-  if (!labels || sort_order === null || images === null) return null;
+  const images = form.get("image_urls");
+  if (!labels || sort_order === null || typeof images !== "string" || images.length > 5018) return null;
 
-  const image_urls = images.split(/\r?\n/).map((url) => url.trim()).filter(Boolean);
-  const host = supabaseUrl ? URL.parse(supabaseUrl)?.host : undefined;
-  for (const input of image_urls) {
-    const url = URL.parse(input);
-    if (!url || url.protocol !== "https:" || !host || url.host !== host ||
-      url.username || url.password || url.search || url.hash ||
-      !url.pathname.startsWith("/storage/v1/object/public/product-images/") ||
-      url.pathname === "/storage/v1/object/public/product-images/") return null;
-  }
+  const lines = images.split(/\r?\n/);
+  if (lines.length > 10 || lines.some((line) => line.length > 500)) return null;
+  const image_urls = lines.map((url) => url.trim()).filter(Boolean);
+  if (image_urls.some((url) => !colorImagePath(url, supabaseUrl))) return null;
 
   return { ...labels, sort_order, image_urls };
 }
