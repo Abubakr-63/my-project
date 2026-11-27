@@ -1,3 +1,4 @@
+import { readProductSearch } from "@/lib/product-search";
 import type { Database } from "@/lib/database.types";
 import { isCartId, MAX_PACKS_PER_LINE } from "@/lib/cart";
 
@@ -114,8 +115,7 @@ export function validateSetting(key: unknown, form: FormData) {
 export function productFilters(params: Record<string, string | string[] | undefined>) {
   const page = typeof params.page === "string" && /^[1-9]\d{0,3}$/.test(params.page) ? Number(params.page) : 1;
   const status = params.active === "active" || params.active === "inactive" ? params.active : "all";
-  const value = typeof params.q === "string" ? params.q.trim() : "";
-  const q = value.length <= 80 && /^[\p{L}\p{M}\p{N} -]+$/u.test(value) ? value : "";
+  const q = readProductSearch(params.q);
   const category = isCartId(params.category) ? params.category : "";
   return { page, status, q, category };
 }

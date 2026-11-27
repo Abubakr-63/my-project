@@ -6,14 +6,56 @@
     "dark": "Dark"
   },
   "Site": { "name": "Shoe Line", "description": "Wholesale women's shoes" },
-  "Menu": { "catalog": "Catalog", "home": "Home" },
+  "Menu": { "catalog": "Catalog", "home": "Home", "cart": "Cart" },
   "Buttons": { "continue": "Continue" },
   "Languages": { "label": "Site language", "ru": "Русский", "tg": "Тоҷикӣ", "en": "English" },
   "Home": {
     "title": "Wholesale women’s shoes",
-    "description": "Our online store is getting ready to open."
+    "description": "Choose women’s shoes by color and order them in packs.",
+    "openCatalog": "Open catalog",
+    "howTitle": "How it works",
+    "featuredTitle": "Latest in the catalog",
+    "categoriesTitle": "Shop by category",
+    "termsTitle": "Wholesale terms",
+    "termsPacks": "Shoes are sold in packs. Each product shows the pairs per pack and size range.",
+    "termsColor": "Each product shows the minimum packs per color.",
+    "termsMinimum": "Minimum order amount: {amount}.",
+    "finalTitle": "Ready to choose your shoes?",
+    "whatsapp": "Write on WhatsApp",
+    "demoCatalog": "Catalog",
+    "demoProduct": "Product",
+    "demoColors": "Colors",
+    "demoPacks": "Packs",
+    "demoCart": "Cart",
+    "demoPairs": "Total pairs",
+    "demoTotal": "Amount",
+    "demoChat": "Order chat",
+    "demoSent": "Order sent",
+    "steps": {
+      "choose": {
+        "title": "Choose models",
+        "text": "Browse the catalog and open the styles you want."
+      },
+      "packs": {
+        "title": "Pick colors and packs",
+        "text": "Choose a color and the number of packs, then add them to your cart."
+      },
+      "order": {
+        "title": "Send the order",
+        "text": "Review your cart, enter your name and phone number, and submit the order."
+      },
+      "contact": {
+        "title": "We contact you on WhatsApp",
+        "text": "We’ll contact you about your order."
+      }
+    }
   },
   "Catalog": {
+    "search": "Search products",
+    "filterButton": "Filters",
+    "applyShort": "Apply",
+    "reset": "Reset",
+    "emptySearch": "Nothing found for “{query}”",
     "title": "Catalog",
     "filters": "Catalog filters",
     "category": "Category",

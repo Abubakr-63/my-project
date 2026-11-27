@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { CartProvider } from "@/components/cart/cart-provider";
+import { ThemeScript } from "@/components/ui/theme-script";
+import { ThemeSync } from "@/components/ui/theme-sync";
 import { Header } from "@/components/header";
 import { locales } from "@/lib/locales";
 import { themeBootstrap } from "@/lib/theme";
@@ -33,18 +34,16 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
 
   setRequestLocale(locale);
-  const { CartLink } = await getMessages({ locale });
+  const { CartLink, Menu } = await getMessages({ locale });
 
   return (
     <html lang={locales[locale].htmlLang} suppressHydrationWarning>
       <head>
-        <Script id="theme-bootstrap" strategy="beforeInteractive">{themeBootstrap}</Script>
-        <noscript dangerouslySetInnerHTML={{
-          __html: "<style>html:not([data-theme]) body{visibility:visible}</style>",
-        }} />
+        <ThemeScript source={themeBootstrap} />
       </head>
       <body className="min-h-screen bg-background text-on-surface antialiased">
-        <NextIntlClientProvider messages={{ CartLink }}>
+        <ThemeSync locale={locale} />
+        <NextIntlClientProvider messages={{ CartLink, Menu }}>
           <CartProvider>
             <Header locale={locale} />
             {children}

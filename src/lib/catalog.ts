@@ -1,3 +1,4 @@
+import { readProductSearch } from "./product-search";
 import type { Database } from "./database.types";
 import { createClient } from "./supabase/server";
 
@@ -20,6 +21,7 @@ export function readCatalogQuery(params: SearchParams) {
     : 1;
 
   return {
+    q: readProductSearch(params.q),
     category: typeof params.category === "string" ? params.category : undefined,
     season: seasons.find((season) => season === params.season),
     minPrice: readPrice(params.minPrice),
@@ -33,6 +35,7 @@ export type CatalogQuery = ReturnType<typeof readCatalogQuery>;
 
 export function catalogSearch(query: CatalogQuery, page: number) {
   return {
+    ...(query.q ? { q: query.q } : {}),
     ...(query.category ? { category: query.category } : {}),
     ...(query.season ? { season: query.season } : {}),
     ...(query.minPrice !== undefined ? { minPrice: String(query.minPrice) } : {}),
@@ -51,7 +54,7 @@ export async function loadCatalogCurrency(supabase: Awaited<ReturnType<typeof cr
   return currency;
 }
 
-export async function loadCatalog(query: CatalogQuery) {
+export async function loadCatalogOptions() {
   const supabase = await createClient({ anonymous: true });
   const [categoriesResult, currency] = await Promise.all([
     supabase.from("categories").select("id, slug, name_ru, name_tg, name_en")
@@ -61,10 +64,11 @@ export async function loadCatalog(query: CatalogQuery) {
 
   if (categoriesResult.error) throw new Error("Catalog categories query failed", { cause: categoriesResult.error });
 
-  const categories = categoriesResult.data;
+  return { categories: categoriesResult.data, currency };
+}
 
-  const category = categories.find(({ slug }) => slug === query.category);
-  const filters = { ...query, category: category?.slug };
+export async function loadCatalogProducts(query: CatalogQuery, categoryId?: string) {
+  const supabase = await createClient({ anonymous: true });
   let productsQuery = supabase.from("products")
     .select(
       "id, slug, name_ru, name_tg, name_en, price_per_pair, pairs_per_pack, size_range, product_colors(image_urls)",
@@ -75,7 +79,13 @@ export async function loadCatalog(query: CatalogQuery) {
     .order("id", { referencedTable: "product_colors" })
     .limit(1, { referencedTable: "product_colors" });
 
-  if (category) productsQuery = productsQuery.eq("category_id", category.id);
+  if (query.q) {
+    const match = `%${query.q}%`;
+    productsQuery = productsQuery.or(
+      `name_ru.ilike.${match},name_tg.ilike.${match},name_en.ilike.${match},slug.ilike.${match}`,
+    );
+  }
+  if (categoryId) productsQuery = productsQuery.eq("category_id", categoryId);
   if (query.season) productsQuery = productsQuery.eq("season", query.season);
   if (query.minPrice !== undefined) productsQuery = productsQuery.gte("price_per_pair", query.minPrice);
   if (query.maxPrice !== undefined) productsQuery = productsQuery.lte("price_per_pair", query.maxPrice);
@@ -94,9 +104,8 @@ export async function loadCatalog(query: CatalogQuery) {
     throw new Error("Catalog products query failed", { cause: error });
   }
 
-  return { categories, currency, filters, products: data ?? [], total: count ?? 0 };
+  return { products: data ?? [], total: count ?? 0 };
 }
 
-type CatalogData = Awaited<ReturnType<typeof loadCatalog>>;
-export type CatalogProduct = CatalogData["products"][number];
-export type CatalogCategory = CatalogData["categories"][number];
+export type CatalogProduct = Awaited<ReturnType<typeof loadCatalogProducts>>["products"][number];
+export type CatalogCategory = Awaited<ReturnType<typeof loadCatalogOptions>>["categories"][number];

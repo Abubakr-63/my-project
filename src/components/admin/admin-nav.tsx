@@ -3,14 +3,15 @@ import { ui } from "@/components/ui/styles";
 import { getTranslations } from "next-intl/server";
 import { signOut } from "@/app/[locale]/admin/actions";
 import type { StoreLocale } from "@/lib/catalog-format";
-import { Link } from "@/lib/navigation";
+import { HeaderLink } from "@/components/ui/header-link";
+import { HeaderControls } from "@/components/ui/header-controls";
 
-export async function SignOutForm({ locale }: { locale: StoreLocale }) {
+export async function SignOutForm({ locale, compact = false }: { locale: StoreLocale; compact?: boolean }) {
   const t = await getTranslations({ locale, namespace: "Admin" });
   return (
     <form action={signOut.bind(null, locale)}>
-      <button type="submit" className={ui.secondary}>
-        <LogoutIcon size={18} />{t("signOut")}
+      <button type="submit" aria-label={t("signOut")} className={compact ? `${ui.ghost} header-item` : ui.secondary}>
+        <LogoutIcon size={18} /><span className={compact ? "hidden sm:inline" : undefined}>{t("signOut")}</span>
       </button>
     </form>
   );
@@ -21,16 +22,16 @@ const sections = { orders: ReceiptIcon, products: InventoryIcon, categories: Cat
 export async function AdminNav({ locale }: { locale: StoreLocale }) {
   const t = await getTranslations({ locale, namespace: "Admin" });
   return (
-    <nav aria-label={t("navigation")} className="flex flex-wrap items-center justify-between gap-1 rounded-m3-xl bg-surface-container-high p-2">
-      <div className="flex flex-wrap gap-1">
+    <nav aria-label={t("navigation")} className="header-bar admin-header rounded-m3-full bg-surface-container-high">
+      <div className="admin-header-links">
         {Object.entries(sections).map(([section, Icon]) => (
-          <Link key={section} href={`/admin/${section}`} prefetch={false}
-            className={ui.ghost}>
-            <Icon size={18} />{t(section)}
-          </Link>
+          <HeaderLink key={section} href={`/admin/${section}`} prefetch={false} aria-label={t(section)}>
+            <Icon size={18} /><span className="hidden sm:inline">{t(section)}</span>
+          </HeaderLink>
         ))}
+        <SignOutForm locale={locale} compact />
       </div>
-      <SignOutForm locale={locale} />
+      <HeaderControls locale={locale} />
     </nav>
   );
 }
