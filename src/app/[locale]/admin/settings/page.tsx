@@ -20,10 +20,10 @@ export default async function SettingsPage({ params }: PageProps<"/[locale]/admi
   return (
     <>
       <AdminNav locale={locale} />
-      <h1 className="text-3xl font-semibold">{t("settings")}</h1>
+      <h1 className="text-headline-large font-medium">{t("settings")}</h1>
       <div className="grid max-w-xl gap-3">
         {settingKeys.map((key) => (
-          <section key={key} className="ui-card p-4">
+          <section key={key} className="ui-card-outlined p-4">
             <CatalogForm action={saveSetting.bind(null, key)}>
               <label className="block">{t(`settingLabels.${key}`)}
                 <input name="value" type={key === "whatsapp_number" ? "tel" : "text"}

@@ -16,7 +16,7 @@ export default async function CheckoutPage({ params }: PageProps<"/[locale]/chec
 
   return (
     <main className="mx-auto max-w-xl space-y-5 px-4 py-8">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="text-headline-large font-medium">{t("title")}</h1>
       <NextIntlClientProvider messages={{ Checkout }}>
         <CheckoutForm locale={locale} />
       </NextIntlClientProvider>

@@ -2,7 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 import { locales, routeLocales, type StoreLocale } from "@/lib/locales";
-import { ui } from "./ui/styles";
 import { Link, usePathname } from "@/lib/navigation";
 
 export function LanguageSwitcher({ locale, label, names }: {
@@ -15,7 +14,7 @@ export function LanguageSwitcher({ locale, label, names }: {
   const href = query ? `${pathname}?${query}` : pathname;
 
   return (
-    <nav aria-label={label} className="flex flex-wrap gap-1">
+    <nav aria-label={label} className="ui-segments">
       {routeLocales.map((option) => (
         <Link
           key={option}
@@ -23,11 +22,12 @@ export function LanguageSwitcher({ locale, label, names }: {
           locale={option}
           prefetch={false}
           lang={locales[option].htmlLang}
+          aria-label={names[option]}
           hrefLang={locales[option].hreflang}
           aria-current={locale === option ? "page" : undefined}
-          className={`${ui.ghost} aria-[current=page]:bg-subtle aria-[current=page]:font-semibold`}
+          className="ui-segment"
         >
-          {names[option]}
+          {option.toUpperCase()}
         </Link>
       ))}
     </nav>

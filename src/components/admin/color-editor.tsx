@@ -1,5 +1,6 @@
 "use client";
 
+import { AddIcon, SaveIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -179,7 +180,7 @@ export function ColorEditor({ colorId, colorName, images, action, children, dele
         </section>
         <fieldset disabled={busy || !!createdId} className="min-w-0 space-y-3">
           {children}
-          <button type="submit" className={ui.primary}>{t("saveCatalog")}</button>
+          <button type="submit" className={ui.primary}><SaveIcon size={18} />{t("saveCatalog")}</button>
         </fieldset>
         {createdId && !photos.some((photo) => photo.blob) && (
           <button type="button" disabled={busy} className={colorPhotoButton} onClick={() => {
@@ -187,7 +188,7 @@ export function ColorEditor({ colorId, colorName, images, action, children, dele
             setCreatedId(undefined);
             setPhotos([]);
             setFeedback(undefined);
-          }}>{t("addAnotherColor")}</button>
+          }}><AddIcon size={18} />{t("addAnotherColor")}</button>
         )}
         <p role="status" aria-live="polite" className="text-sm">{feedback && t(feedback)}</p>
       </form>

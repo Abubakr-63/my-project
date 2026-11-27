@@ -1,5 +1,6 @@
 "use client";
 
+import { LoginIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
@@ -27,7 +28,7 @@ export function LoginForm({ locale }: { locale: StoreLocale }) {
       </label>
       <p id="admin-login-error" role="alert">{result && t("credentials")}</p>
       <button disabled={pending} type="submit" className={ui.primary}>
-        {t(pending ? "signingIn" : "signIn")}
+        <LoginIcon size={18} />{t(pending ? "signingIn" : "signIn")}
       </button>
     </form>
   );

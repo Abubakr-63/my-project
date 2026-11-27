@@ -1,5 +1,7 @@
 "use client";
 
+import { AddIcon, DeleteIcon, MinusIcon, SaveIcon } from "@/components/ui/icons";
+import { Message } from "@/components/ui/message";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -20,6 +22,7 @@ export function CatalogForm({ action, children, label = "saveCatalog", confirm =
     return next;
   }, null);
 
+  const ActionIcon = { delete: DeleteIcon, activate: AddIcon, deactivate: MinusIcon, saveCatalog: SaveIcon }[label];
   return (
     <form action={submit} aria-busy={pending} className="space-y-2"
       onSubmit={(event) => {
@@ -31,10 +34,10 @@ export function CatalogForm({ action, children, label = "saveCatalog", confirm =
       {children}
       <button type="submit" disabled={pending}
         className={label === "delete" ? ui.danger : ui.secondary}>
-        {t(pending ? "saving" : label)}
+        <ActionIcon size={18} />{t(pending ? "saving" : label)}
       </button>
-      <p role="status" className="text-sm">{!pending && result?.ok && t("catalogSaved")}</p>
-      {!pending && result && !result.ok && <p role="alert" className="text-sm text-danger">{t(result.error)}</p>}
+      {!pending && result?.ok && <Message tone="success">{t("catalogSaved")}</Message>}
+      {!pending && result && !result.ok && <p role="alert" className="text-sm text-error">{t(result.error)}</p>}
     </form>
   );
 }

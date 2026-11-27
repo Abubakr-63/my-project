@@ -90,11 +90,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         >
           {localizedName(product.categories, locale)}
         </Link>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{name}</h1>
-        {description && <p className="mt-3 max-w-3xl whitespace-pre-line text-muted">{description}</p>}
+        <h1 className="mt-2 text-headline-large font-medium tracking-tight sm:text-4xl">{name}</h1>
+        {description && <p className="mt-3 max-w-3xl whitespace-pre-line text-on-surface-variant">{description}</p>}
       </div>
 
-      <ul className="mb-6 flex flex-wrap gap-x-6 gap-y-2 ui-card p-4 text-sm text-muted">
+      <ul className="mb-6 flex flex-wrap gap-x-6 gap-y-2 ui-card p-4 text-sm text-on-surface-variant">
         <li>{t("Product.season", { season: t(`Catalog.seasons.${product.season}`) })}</li>
         <li>{t("Catalog.sizes", { range: product.size_range })}</li>
         <li>{t("Catalog.pairsPerPack", { count: product.pairs_per_pack })}</li>

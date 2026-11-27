@@ -1,5 +1,6 @@
 "use client";
 
+import { SendIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { useEffect, useState } from "react";
 import { readLastOrder, type OrderSummary } from "@/lib/checkout/summary";
@@ -16,7 +17,7 @@ export function WhatsAppButton({ phone, orderNumber, label }: {
   return (
     <a href={whatsAppLink(phone, orderNumber, summary)} target="_blank" rel="noopener noreferrer"
       className={ui.success}>
-      {label}
+      <SendIcon size={18} />{label}
     </a>
   );
 }

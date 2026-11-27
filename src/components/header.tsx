@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { CartLink } from "./cart/cart-link";
 import { ThemeToggle } from "./ui/theme-toggle";
+import { InventoryIcon, StoreIcon } from "./ui/icons";
 import { ui } from "./ui/styles";
 import { LanguageSwitcher } from "./language-switcher";
 import { Link } from "@/lib/navigation";
@@ -16,21 +17,22 @@ export async function Header({ locale }: { locale: StoreLocale }) {
   };
 
   return (
-    <header className="border-b border-outline bg-surface">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-5 py-3">
-        <Link href="/" title={t("Menu.home")} className={`${ui.ghost} text-lg font-semibold`}>
-          {t("Site.name")}
+    <header className="floating-header">
+      <div className="flex flex-wrap items-center justify-between gap-x-1 gap-y-1 p-2 sm:px-3">
+        <Link href="/" title={t("Menu.home")} className={`${ui.ghost} min-w-0 flex-1 justify-start gap-2 text-title-medium font-semibold sm:flex-none`}>
+          <StoreIcon className="shrink-0 text-primary" /><span className="truncate">{t("Site.name")}</span>
         </Link>
         <Link
           href="/catalog"
-          className={ui.ghost}
+          className={`${ui.ghost} gap-2 px-2 sm:px-3`} aria-label={t("Menu.catalog")}
         >
-          {t("Menu.catalog")}
+          <InventoryIcon /><span className="hidden sm:inline">{t("Menu.catalog")}</span>
         </Link>
         <CartLink />
+        <div className="flex w-full items-center justify-between gap-1 sm:w-auto">
         <Suspense fallback={
-          <div aria-hidden="true" className="invisible flex flex-wrap gap-1">
-            {Object.entries(languageNames).map(([code, name]) => <span key={code} className={ui.ghost}>{name}</span>)}
+          <div aria-hidden="true" className="ui-segments invisible">
+            {Object.keys(languageNames).map((code) => <span key={code} className="ui-segment">{code.toUpperCase()}</span>)}
           </div>
         }>
           <LanguageSwitcher locale={locale} label={t("Languages.label")} names={languageNames} />
@@ -38,6 +40,7 @@ export async function Header({ locale }: { locale: StoreLocale }) {
         <ThemeToggle label={t("Theme.label")} labels={{
           system: t("Theme.system"), light: t("Theme.light"), dark: t("Theme.dark"),
         }} />
+        </div>
       </div>
     </header>
   );

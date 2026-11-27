@@ -1,3 +1,4 @@
+import { ArrowBackIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
@@ -30,8 +31,8 @@ export default async function SuccessPage({ params, searchParams }: PageProps<"/
 
   if (!validOrderNumber(order)) return (
     <main className="mx-auto max-w-xl space-y-4 px-4 py-8">
-      <h1 className="text-2xl font-semibold">{t("invalid")}</h1>
-      <Link href="/catalog" className={ui.link}>{t("catalog")}</Link>
+      <h1 className="text-headline-small font-medium">{t("invalid")}</h1>
+      <Link href="/catalog" className={ui.link}><ArrowBackIcon size={18} />{t("catalog")}</Link>
     </main>
   );
 
@@ -39,11 +40,11 @@ export default async function SuccessPage({ params, searchParams }: PageProps<"/
   return (
     <main className="mx-auto max-w-xl px-4 py-8 sm:py-12">
       <section className="space-y-4 ui-card p-5 sm:p-7">
-        <h1 className="text-2xl font-semibold">{t("accepted", { orderNumber: order })}</h1>
+        <h1 className="text-headline-small font-medium">{t("accepted", { orderNumber: order })}</h1>
         <p>{t("saved")}</p>
         <div className="flex flex-wrap items-center gap-4">
           {phone && <WhatsAppButton key={order} phone={phone} orderNumber={order} label={t("whatsapp")} />}
-          <Link href="/catalog" className={ui.link}>{t("catalog")}</Link>
+          <Link href="/catalog" className={ui.link}><ArrowBackIcon size={18} />{t("catalog")}</Link>
         </div>
       </section>
     </main>

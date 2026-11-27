@@ -1,5 +1,6 @@
 "use client";
 
+import { AddPhotoIcon, CameraIcon, CloseIcon, RefreshIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -44,35 +45,35 @@ export function StagedColorPhotos({ photos, disabled, canPick, onPick, onRemove,
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
         <button type="button" className={colorPhotoButton} disabled={disabled || !canPick}
-          aria-describedby={hintId} onClick={() => picker.current?.click()}>{t("choosePhotos")}</button>
+          aria-describedby={hintId} onClick={() => picker.current?.click()}><AddPhotoIcon size={18} />{t("choosePhotos")}</button>
         <input ref={picker} type="file" accept="image/jpeg,image/png,image/webp" multiple hidden
           disabled={disabled || !canPick} onChange={selectFiles} />
         <button type="button" className={colorPhotoButton} disabled={disabled || !canPick}
-          aria-describedby={hintId} onClick={() => camera.current?.click()}>{t("takePhoto")}</button>
+          aria-describedby={hintId} onClick={() => camera.current?.click()}><CameraIcon size={18} />{t("takePhoto")}</button>
         <input ref={camera} type="file" accept="image/*" capture="environment" hidden
           disabled={disabled || !canPick} onChange={selectFiles} />
       </div>
-      <p id={hintId} className="text-sm text-muted">{t("imageHint")}</p>
+      <p id={hintId} className="text-sm text-on-surface-variant">{t("imageHint")}</p>
       {photos.length > 0 && (
         <ul className="grid gap-2 sm:grid-cols-2">
           {photos.map((photo) => (
-            <li key={photo.id} className="flex items-start gap-3 rounded-md border border-outline p-2">
+            <li key={photo.id} className="flex items-start gap-3 rounded-m3-sm border border-outline-variant p-2">
               {photo.preview && <Image unoptimized src={photo.preview} alt={t("stagedPhotoAlt", { name: photo.name })}
-                width={72} height={72} className="size-[72px] shrink-0 rounded bg-subtle object-contain" />}
+                width={72} height={72} className="size-[72px] shrink-0 rounded-m3-xs bg-surface-container object-contain" />}
               <div className="min-w-0 space-y-1">
                 <p role="status" aria-live="polite" className="wrap-anywhere text-sm">
                   {t("imageProgress", { name: photo.name, status: t(photo.stage) })}
-                  {photo.warning && <span className="block text-warning">{t("imageBelowRecommended")}</span>}
+                  {photo.warning && <span className="block text-tertiary">{t("imageBelowRecommended")}</span>}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {photo.uploadFailed && (
                     <button type="button" className={colorPhotoButton} disabled={disabled}
-                      onClick={() => onRetry(photo.id)}>{t("retry")}</button>
+                      onClick={() => onRetry(photo.id)}><RefreshIcon size={18} />{t("retry")}</button>
                   )}
                   {photo.stage !== "imageDone" && (
                     <button type="button" className={ui.danger} disabled={disabled}
                       aria-label={t("removeStagedPhoto", { name: photo.name })}
-                      onClick={() => onRemove(photo.id)}>{t("imageRemove")}</button>
+                      onClick={() => onRemove(photo.id)}><CloseIcon size={18} />{t("imageRemove")}</button>
                   )}
                 </div>
               </div>

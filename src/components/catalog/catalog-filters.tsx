@@ -1,3 +1,4 @@
+import { FilterIcon, RestartIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/lib/navigation";
@@ -70,10 +71,10 @@ export async function CatalogFilters({
           type="submit"
           className={ui.primary}
         >
-          {t("apply")}
+          <FilterIcon size={18} />{t("apply")}
         </button>
         <Link href="/catalog" className={ui.link}>
-          {t("clear")}
+          <RestartIcon size={18} />{t("clear")}
         </Link>
       </div>
     </form>

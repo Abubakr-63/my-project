@@ -1,3 +1,5 @@
+import { EditIcon } from "@/components/ui/icons";
+import { AddIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -23,9 +25,9 @@ export default async function CategoriesPage({ params }: PageProps<"/[locale]/ad
   return (
     <>
       <AdminNav locale={locale} />
-      <h1 className="text-3xl font-semibold">{t("categories")}</h1>
+      <h1 className="text-headline-large font-medium">{t("categories")}</h1>
       <details className="space-y-3 ui-card p-4">
-        <summary className="min-h-11 cursor-pointer rounded py-2 font-semibold focus-visible:outline-2">{t("newCategory")}</summary>
+        <summary className="min-h-11 cursor-pointer rounded-m3-xs py-2 font-semibold focus-visible:outline-2"><AddIcon size={18} />{t("newCategory")}</summary>
         <CatalogForm action={saveCategory.bind(null, null)}>
           <NameFields /><SlugField /><SortField />
         </CatalogForm>
@@ -36,9 +38,9 @@ export default async function CategoriesPage({ params }: PageProps<"/[locale]/ad
           <li key={category.id} className="flex flex-wrap items-start justify-between gap-3 ui-card p-4">
             <div>
               <Link prefetch={false} href={`/admin/categories/${category.id}`} className={ui.link}>
-                {localizedName(category, locale)}
+                <EditIcon size={18} />{localizedName(category, locale)}
               </Link>
-              <p className="text-sm text-muted">{category.slug}</p>
+              <p className="text-sm text-on-surface-variant">{category.slug}</p>
             </div>
             <CatalogForm action={deleteCategory.bind(null, category.id)} label="delete" confirm />
           </li>

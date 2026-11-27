@@ -21,7 +21,7 @@ export default async function EditCategoryPage({ params }: PageProps<"/[locale]/
   return (
     <>
       <AdminNav locale={locale} />
-      <h1 className="text-3xl font-semibold">{t("editCategory")}</h1>
+      <h1 className="text-headline-large font-medium">{t("editCategory")}</h1>
       <CatalogForm action={saveCategory.bind(null, id)}>
         <NameFields values={data} /><SlugField value={data.slug} /><SortField value={data.sort_order} />
       </CatalogForm>

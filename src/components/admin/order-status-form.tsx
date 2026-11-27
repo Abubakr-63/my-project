@@ -1,5 +1,7 @@
 "use client";
 
+import { SaveIcon } from "@/components/ui/icons";
+import { Message } from "@/components/ui/message";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
@@ -17,7 +19,7 @@ export function OrderStatusForm({ id, status }: { id: string; status: OrderStatu
   );
 
   return (
-    <form action={action} aria-busy={pending} className="space-y-2 border-t border-outline pt-4">
+    <form action={action} aria-busy={pending} className="space-y-2 border-t border-outline-variant pt-4">
       <div className="flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1">{t("status")}
           <select name="status" defaultValue={status} disabled={pending}
@@ -26,10 +28,10 @@ export function OrderStatusForm({ id, status }: { id: string; status: OrderStatu
           </select>
         </label>
         <button type="submit" disabled={pending} className={ui.primary}>
-          {t(pending ? "saving" : "save")}
+          <SaveIcon size={18} />{t(pending ? "saving" : "save")}
         </button>
       </div>
-      <p role="status">{!pending && result?.ok && t("saved")}</p>
+      {!pending && result?.ok && <Message tone="success">{t("saved")}</Message>}
       {result && !result.ok && <p role="alert">{t(result.error)}</p>}
     </form>
   );

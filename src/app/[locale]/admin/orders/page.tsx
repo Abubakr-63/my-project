@@ -1,3 +1,5 @@
+import { FilterIcon } from "@/components/ui/icons";
+import { PagerLink } from "@/components/ui/pager-link";
 import { ui } from "@/components/ui/styles";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -7,7 +9,6 @@ import { OrdersList } from "@/components/admin/orders-list";
 import { requireAdmin } from "@/lib/admin/access";
 import { orderFilters, ORDER_PAGE_SIZE, orderStatuses } from "@/lib/admin/orders";
 import { loadCatalogCurrency } from "@/lib/catalog";
-import { Link } from "@/lib/navigation";
 import { routing } from "@/lib/routing";
 
 export default async function AdminOrdersPage({ params, searchParams }: PageProps<"/[locale]/admin/orders">) {
@@ -44,7 +45,7 @@ export default async function AdminOrdersPage({ params, searchParams }: PageProp
   return (
     <>
       <AdminNav locale={locale} />
-      <h1 className="text-3xl font-semibold">{t("orders")}</h1>
+      <h1 className="text-headline-large font-medium">{t("orders")}</h1>
       <form method="get" action={`/${locale}/admin/orders`} className="flex flex-wrap items-end gap-3">
         <label className="flex min-w-0 flex-1 basis-56 flex-col gap-1">{t("search")}
           <input name="q" type="search" maxLength={40} defaultValue={filter.q} className={ui.input} />
@@ -55,16 +56,14 @@ export default async function AdminOrdersPage({ params, searchParams }: PageProp
             {orderStatuses.map((status) => <option key={status} value={status}>{t(`statuses.${status}`)}</option>)}
           </select>
         </label>
-        <button type="submit" className={control}>{t("apply")}</button>
+        <button type="submit" className={control}><FilterIcon size={18} />{t("apply")}</button>
       </form>
       <OrdersList orders={result.data ?? []} currency={currency} locale={locale} />
       {(pages > 1 || filter.page > 1) && (
         <nav aria-label={t("pagination")} className="flex flex-wrap items-center gap-3">
-          {filter.page > 1 && <Link href={pageLink(filter.page > pages ? 1 : filter.page - 1)} prefetch={false}
-            className={`inline-flex items-center ${control}`}>{t("previous")}</Link>}
+          {filter.page > 1 && <PagerLink direction="previous" href={pageLink(filter.page > pages ? 1 : filter.page - 1)} prefetch={false}>{t("previous")}</PagerLink>}
           {filter.page <= pages && <span>{t("page", { page: filter.page, pages })}</span>}
-          {filter.page < pages && <Link href={pageLink(filter.page + 1)} prefetch={false}
-            className={`inline-flex items-center ${control}`}>{t("next")}</Link>}
+          {filter.page < pages && <PagerLink direction="next" href={pageLink(filter.page + 1)} prefetch={false}>{t("next")}</PagerLink>}
         </nav>
       )}
     </>

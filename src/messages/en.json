@@ -170,7 +170,7 @@
     "imageUploading": "Uploading…",
     "imageDone": "Done",
     "imageInvalid": "Invalid image file.",
-    "imageOriginalTooLarge": "The original file exceeds 15 MB.",
+    "imageOriginalTooLarge": "The original file exceeds 25 MB.",
     "imageTooSmall": "The longest side must be at least 300 px.",
     "imageTooLarge": "The image is too large.",
     "imageLimit": "This color already has 10 images.",

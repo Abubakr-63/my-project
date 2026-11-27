@@ -1,5 +1,6 @@
 "use client";
 
+import { CartIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/navigation";
@@ -7,18 +8,14 @@ import { useCart } from "./cart-provider";
 
 export function CartLink() {
   const t = useTranslations("CartLink");
-  const { totalLines } = useCart();
+  const { totalLines, lines } = useCart();
+  const cartSize = lines.reduce((sum, line) => sum + line.packs, 0);
 
   return (
     <Link href="/cart" prefetch={false} aria-label={t("label", { count: totalLines })}
-      className={`${ui.ghost} gap-2`}>
-      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 3h3l3 12h11l3-9H6" />
-        <circle cx="9" cy="20" r="1" />
-        <circle cx="18" cy="20" r="1" />
-      </svg>
-      {totalLines > 0 && <span aria-hidden="true" className="rounded-full bg-accent px-2 text-xs text-on-accent">{totalLines}</span>}
+      className={`${ui.ghost} relative`}>
+      <CartIcon key={cartSize} className={cartSize > 0 ? "cart-bump" : undefined} />
+      {totalLines > 0 && <span aria-hidden="true" className="absolute end-0 top-0 min-w-5 rounded-m3-full bg-error-container px-1 text-center text-label-small text-on-error-container">{totalLines}</span>}
     </Link>
   );
 }

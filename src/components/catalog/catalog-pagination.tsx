@@ -1,9 +1,6 @@
-import { ui } from "@/components/ui/styles";
+import { PagerLink } from "@/components/ui/pager-link";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/lib/navigation";
 import { catalogSearch, type CatalogQuery } from "@/lib/catalog";
-
-const linkStyle = ui.secondary;
 
 export async function CatalogPagination({ filters, pages }: { filters: CatalogQuery; pages: number }) {
   if (pages < 2) return null;
@@ -14,15 +11,15 @@ export async function CatalogPagination({ filters, pages }: { filters: CatalogQu
   return (
     <nav aria-label={t("pagination")} className="mt-8 flex flex-wrap items-center justify-center gap-3">
       {page > 1 && (
-        <Link href={{ pathname: "/catalog", query: catalogSearch(filters, page - 1) }} className={linkStyle}>
+        <PagerLink direction="previous" href={{ pathname: "/catalog", query: catalogSearch(filters, page - 1) }}>
           {t("previous")}
-        </Link>
+        </PagerLink>
       )}
-      <span className="text-sm text-muted">{t("pageNumber", { page, pages })}</span>
+      <span className="text-sm text-on-surface-variant">{t("pageNumber", { page, pages })}</span>
       {page < pages && (
-        <Link href={{ pathname: "/catalog", query: catalogSearch(filters, page + 1) }} className={linkStyle}>
+        <PagerLink direction="next" href={{ pathname: "/catalog", query: catalogSearch(filters, page + 1) }}>
           {t("next")}
-        </Link>
+        </PagerLink>
       )}
     </nav>
   );

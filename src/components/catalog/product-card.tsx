@@ -1,3 +1,4 @@
+import { ImageIcon } from "@/components/ui/icons";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/lib/navigation";
@@ -21,9 +22,9 @@ export async function ProductCard({
   return (
     <Link
       href={`/catalog/${encodeURIComponent(product.slug)}`}
-      className="group block h-full overflow-hidden ui-card ui-interactive-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      className="group block h-full overflow-hidden ui-card-elevated ui-interactive-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     >
-      <div className="relative grid aspect-square place-items-center bg-subtle">
+      <div className="relative grid aspect-square place-items-center bg-surface-container">
         {image ? (
           <Image
             src={image}
@@ -34,14 +35,14 @@ export async function ProductCard({
             className="object-cover"
           />
         ) : (
-          <span className="px-2 text-center text-sm text-muted">{t("noImage")}</span>
+          <span className="px-2 text-center text-sm text-on-surface-variant"><ImageIcon size={28} className="mx-auto mb-2" />{t("noImage")}</span>
         )}
       </div>
       <div className="space-y-2 p-3 wrap-anywhere sm:p-4">
         <h2 className="font-semibold group-hover:underline">{name}</h2>
         <p className="font-medium">{t("perPair", { price: pairPrice })}</p>
-        <p className="text-sm text-muted">{t("perPack", { price: packPrice })}</p>
-        <div className="space-y-1 border-t border-outline pt-2 text-sm text-muted">
+        <p className="text-sm text-on-surface-variant">{t("perPack", { price: packPrice })}</p>
+        <div className="space-y-1 border-t border-outline-variant pt-2 text-sm text-on-surface-variant">
           <p>{t("sizes", { range: product.size_range })}</p>
           <p>{t("pairsPerPack", { count: product.pairs_per_pack })}</p>
         </div>

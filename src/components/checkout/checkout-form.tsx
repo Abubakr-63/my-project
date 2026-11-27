@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowBackIcon, CheckIcon, RefreshIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -75,7 +76,7 @@ export function CheckoutForm({ locale }: { locale: StoreLocale }) {
   const inputStyle = `${ui.input} mt-1 block w-full`;
   return (
     <form onSubmit={onSubmit} noValidate aria-busy={pending} className="space-y-4 ui-card p-5">
-      <section className="space-y-2 border-b border-outline pb-4" aria-labelledby="checkout-summary">
+      <section className="space-y-2 border-b border-outline-variant pb-4" aria-labelledby="checkout-summary">
         <h2 id="checkout-summary" className="font-semibold">{t("summary")}</h2>
         <div aria-live="polite" className="space-y-2">
           {!lines.length && <p>{t("empty")}</p>}
@@ -104,7 +105,7 @@ export function CheckoutForm({ locale }: { locale: StoreLocale }) {
           )}
         </div>
         {result && !details && <button type="button" className="min-h-11 underline focus-visible:outline-2"
-          onClick={() => setRevision((value) => value + 1)}>{t("retry")}</button>}
+          onClick={() => setRevision((value) => value + 1)}><RefreshIcon size={18} />{t("retry")}</button>}
       </section>
       <label className="block">{t("name")}
         <input className={inputStyle} name="name" autoComplete="name" required maxLength={MAX_CUSTOMER_NAME}
@@ -126,9 +127,9 @@ export function CheckoutForm({ locale }: { locale: StoreLocale }) {
       <p role="alert">{error && t(error)}</p>
       <div className="flex flex-wrap items-center gap-4">
         <button disabled={pending || !canSubmit} className={ui.primary}>
-          {t(pending ? "sending" : "submit")}
+          <CheckIcon size={18} />{t(pending ? "sending" : "submit")}
         </button>
-        <Link href="/cart" prefetch={false} className={ui.link}>{t("back")}</Link>
+        <Link href="/cart" prefetch={false} className={ui.link}><ArrowBackIcon size={18} />{t("back")}</Link>
       </div>
     </form>
   );

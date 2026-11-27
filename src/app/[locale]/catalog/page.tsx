@@ -26,7 +26,7 @@ export default async function CatalogPage({ params, searchParams }: PageProps<"/
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
-      <h1 className="mb-6 text-3xl font-semibold tracking-tight sm:text-4xl">{t("title")}</h1>
+      <h1 className="mb-6 text-headline-large font-medium tracking-tight sm:text-4xl">{t("title")}</h1>
       <CatalogFilters categories={categories} filters={filters} locale={locale} currency={currency} />
       {products.length ? (
         <ul className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
@@ -39,7 +39,7 @@ export default async function CatalogPage({ params, searchParams }: PageProps<"/
       ) : (
         <div className="ui-card px-5 py-12 text-center">
           <h2 className="text-lg font-semibold">{t("emptyTitle")}</h2>
-          <p className="mt-2 text-sm text-muted">{t("emptyDescription")}</p>
+          <p className="mt-2 text-sm text-on-surface-variant">{t("emptyDescription")}</p>
         </div>
       )}
       <CatalogPagination filters={filters} pages={pages} />

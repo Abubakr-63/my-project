@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowBackIcon, ArrowForwardIcon, CloseIcon, DeleteIcon, RefreshIcon } from "@/components/ui/icons";
+import { Message } from "@/components/ui/message";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useSyncExternalStore } from "react";
@@ -41,7 +43,7 @@ export function CartView({ locale }: { locale: StoreLocale }) {
   if (!lines.length) return (
     <div className="space-y-3 ui-card p-5">
       <p>{t("empty")}</p>
-      <Link href="/catalog" className={cartButton}>{t("browse")}</Link>
+      <Link href="/catalog" className={cartButton}><ArrowBackIcon size={18} />{t("browse")}</Link>
     </div>
   );
 
@@ -66,16 +68,16 @@ export function CartView({ locale }: { locale: StoreLocale }) {
             clear();
             setConfirmClear(false);
             setAdjusted({});
-          }}>{t("clearYes")}</button>
-          <button type="button" className={cartButton} onClick={() => setConfirmClear(false)}>{t("cancel")}</button>
+          }}><DeleteIcon size={18} />{t("clearYes")}</button>
+          <button type="button" className={cartButton} onClick={() => setConfirmClear(false)}><CloseIcon size={18} />{t("cancel")}</button>
         </div>
-      ) : <button type="button" className={cartButton} onClick={() => setConfirmClear(true)}>{t("clear")}</button>}
+      ) : <button type="button" className={cartButton} onClick={() => setConfirmClear(true)}><DeleteIcon size={18} />{t("clear")}</button>}
 
       {!current && <p role="status">{t("loading")}</p>}
       {current && !details && (
         <div className="space-y-2">
           <p role="alert">{t("error")}</p>
-          <button type="button" className={cartButton} onClick={() => setRetry((value) => value + 1)}>{t("retry")}</button>
+          <button type="button" className={cartButton} onClick={() => setRetry((value) => value + 1)}><RefreshIcon size={18} />{t("retry")}</button>
         </div>
       )}
       {details && (
@@ -88,18 +90,18 @@ export function CartView({ locale }: { locale: StoreLocale }) {
                 locale={locale} adjusted={adjusted[id] === item?.minPacks && adjusted[id] !== undefined} />;
             })}
           </ul>
-          <section className="ui-card ui-sticky sticky space-y-2 p-3 shadow-md md:static md:p-5 md:shadow-none">
+          <section className="ui-card ui-sticky sticky space-y-2 p-3 md:static md:p-5">
             <h2 className="font-semibold">{t("summary")}</h2>
             <div role="status" aria-atomic="true" className="space-y-1">
               <p>{t("totalPairs", { count: totalPairs })}</p>
               <p className="font-semibold">{t("totalAmount", { price: formatPrice(totalCents / 100, details.currency, locale) })}</p>
               {totalCents < Math.round(details.minimumOrderAmount * 100) && (
-                <p className="text-warning">{t("minimumAmount", { price: formatPrice(details.minimumOrderAmount, details.currency, locale) })}</p>
+                <Message tone="warning">{t("minimumAmount", { price: formatPrice(details.minimumOrderAmount, details.currency, locale) })}</Message>
               )}
             </div>
             {validatedLines.length === lines.length && validatedLines.every((line, index) => line.packs === lines[index].packs) && totalCents >= Math.round(details.minimumOrderAmount * 100)
-              ? <Link href="/checkout" prefetch={false} className={`${ui.primary} w-full sm:w-auto`}>{t("checkout")}</Link>
-              : <button type="button" className={`${ui.primary} w-full sm:w-auto`} disabled>{t("checkout")}</button>}
+              ? <Link href="/checkout" prefetch={false} className={`${ui.primary} w-full sm:w-auto`}><ArrowForwardIcon size={18} />{t("checkout")}</Link>
+              : <button type="button" className={`${ui.primary} w-full sm:w-auto`} disabled><ArrowForwardIcon size={18} />{t("checkout")}</button>}
           </section>
         </>
       )}

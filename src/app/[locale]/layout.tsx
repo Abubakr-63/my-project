@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -36,8 +37,13 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locales[locale].htmlLang} suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{ __html: themeBootstrap }} /></head>
-      <body className="min-h-screen bg-page text-ink antialiased">
+      <head>
+        <Script id="theme-bootstrap" strategy="beforeInteractive">{themeBootstrap}</Script>
+        <noscript dangerouslySetInnerHTML={{
+          __html: "<style>html:not([data-theme]) body{visibility:visible}</style>",
+        }} />
+      </head>
+      <body className="min-h-screen bg-background text-on-surface antialiased">
         <NextIntlClientProvider messages={{ CartLink }}>
           <CartProvider>
             <Header locale={locale} />

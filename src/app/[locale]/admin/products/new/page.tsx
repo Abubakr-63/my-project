@@ -17,7 +17,7 @@ export default async function NewProductPage({ params }: PageProps<"/[locale]/ad
   return (
     <>
       <AdminNav locale={locale} />
-      <h1 className="text-3xl font-semibold">{t("newProduct")}</h1>
+      <h1 className="text-headline-large font-medium">{t("newProduct")}</h1>
       <p>{t("draftHint")}</p>
       <ProductForm categories={data} locale={locale} />
     </>

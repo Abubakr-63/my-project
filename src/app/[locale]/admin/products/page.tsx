@@ -1,3 +1,6 @@
+import { EditIcon } from "@/components/ui/icons";
+import { AddIcon, FilterIcon } from "@/components/ui/icons";
+import { PagerLink } from "@/components/ui/pager-link";
 import { ui } from "@/components/ui/styles";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -47,8 +50,8 @@ export default async function ProductsPage({ params, searchParams }: PageProps<"
     <>
       <AdminNav locale={locale} />
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-3xl font-semibold">{t("products")}</h1>
-        <Link href="/admin/products/new" prefetch={false} className={`inline-flex items-center ${control}`}>{t("newProduct")}</Link>
+        <h1 className="text-headline-large font-medium">{t("products")}</h1>
+        <Link href="/admin/products/new" prefetch={false} className={`inline-flex items-center ${control}`}><AddIcon size={18} />{t("newProduct")}</Link>
       </div>
       <form method="get" action={`/${locale}/admin/products`} className="flex flex-wrap items-end gap-3">
         <label className="flex min-w-0 flex-1 basis-56 flex-col gap-1">{t("productSearch")}
@@ -67,7 +70,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps<"
             {categories.data.map((category) => <option key={category.id} value={category.id}>{localizedName(category, locale)}</option>)}
           </select>
         </label>
-        <button type="submit" className={control}>{t("apply")}</button>
+        <button type="submit" className={control}><FilterIcon size={18} />{t("apply")}</button>
       </form>
       {!products.length && <p>{t("noProducts")}</p>}
       <ul className="space-y-2">
@@ -75,10 +78,10 @@ export default async function ProductsPage({ params, searchParams }: PageProps<"
           <li key={product.id} className="flex flex-wrap items-start justify-between gap-3 ui-card p-4">
             <div>
               <Link prefetch={false} href={`/admin/products/${product.id}`} className={ui.link}>
-                {localizedName(product, locale)}
+                <EditIcon size={18} />{localizedName(product, locale)}
               </Link>
-              <p className="text-sm text-muted">{formatPrice(product.price_per_pair, currency, locale)}</p>
-              <p className="text-sm text-muted">{t(product.is_active ? "active" : "inactive")}</p>
+              <p className="text-sm text-on-surface-variant">{formatPrice(product.price_per_pair, currency, locale)}</p>
+              <p className="text-sm text-on-surface-variant">{t(product.is_active ? "active" : "inactive")}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <CatalogForm action={setProductActive.bind(null, product.id, !product.is_active)}
@@ -91,15 +94,15 @@ export default async function ProductsPage({ params, searchParams }: PageProps<"
       {(pages > 1 || filters.page > 1) && (
         <nav aria-label={t("catalogPages")} className="flex flex-wrap items-center gap-3">
           {filters.page > 1 && (
-            <Link prefetch={false} href={pageHref(filters.page > pages ? 1 : filters.page - 1)} className={`inline-flex items-center ${control}`}>
+            <PagerLink direction="previous" prefetch={false} href={pageHref(filters.page > pages ? 1 : filters.page - 1)}>
               {t("previous")}
-            </Link>
+            </PagerLink>
           )}
           {filters.page <= pages && <span>{t("page", { page: filters.page, pages })}</span>}
           {filters.page < pages && (
-            <Link prefetch={false} href={pageHref(filters.page + 1)} className={`inline-flex items-center ${control}`}>
+            <PagerLink direction="next" prefetch={false} href={pageHref(filters.page + 1)}>
               {t("next")}
-            </Link>
+            </PagerLink>
           )}
         </nav>
       )}

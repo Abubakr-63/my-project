@@ -1,5 +1,6 @@
 "use client";
 
+import { RefreshIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -12,7 +13,7 @@ export default function AdminError({ reset }: { reset: () => void }) {
     <div className="space-y-3">
       <p role="alert">{t("loadError")}</p>
       <button type="button" className={ui.secondary}
-        onClick={() => startTransition(() => { router.refresh(); reset(); })}>{t("retry")}</button>
+        onClick={() => startTransition(() => { router.refresh(); reset(); })}><RefreshIcon size={18} />{t("retry")}</button>
     </div>
   );
 }

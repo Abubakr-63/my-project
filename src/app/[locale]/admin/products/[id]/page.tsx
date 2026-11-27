@@ -27,7 +27,7 @@ export default async function EditProductPage({ params }: PageProps<"/[locale]/a
   return (
     <>
       <AdminNav locale={locale} />
-      <h1 className="text-3xl font-semibold">{t("editProduct")}</h1>
+      <h1 className="text-headline-large font-medium">{t("editProduct")}</h1>
       <div className="ui-card p-4">
         <p className="mb-2">{t(product.data.is_active ? "active" : "inactive")}</p>
         <CatalogForm action={setProductActive.bind(null, id, !product.data.is_active)}

@@ -1,5 +1,6 @@
 "use client";
 
+import { RefreshIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -11,9 +12,9 @@ export default function CartError({ reset }: { reset: () => void }) {
 
   return (
     <main className="mx-auto max-w-3xl space-y-4 px-4 py-8">
-      <h1 role="alert" className="text-2xl font-semibold">{t("error")}</h1>
+      <h1 role="alert" className="text-headline-small font-medium">{t("error")}</h1>
       <button type="button" className={ui.secondary}
-        onClick={() => startTransition(() => { router.refresh(); reset(); })}>{t("retry")}</button>
+        onClick={() => startTransition(() => { router.refresh(); reset(); })}><RefreshIcon size={18} />{t("retry")}</button>
     </main>
   );
 }

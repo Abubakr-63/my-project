@@ -1,5 +1,7 @@
 "use client";
 
+import { DeleteIcon, ImageIcon } from "@/components/ui/icons";
+import { QuantityStepper } from "@/components/ui/stepper";
 import { ui } from "@/components/ui/styles";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -27,9 +29,8 @@ function PacksStepper({ packs, minimum, onChange }: {
   }
 
   return (
-    <div className="flex flex-wrap items-end gap-2">
-      <button type="button" className={cartButton} aria-label={t("decrease")}
-        disabled={packs <= minimum} onClick={() => commit(packs - 1)}>−</button>
+    <QuantityStepper decreaseLabel={t("decrease")} increaseLabel={t("increase")}
+      atMin={packs <= minimum} atMax={packs >= MAX_PACKS_PER_LINE} adjust={(delta) => commit(packs + delta)}>
       <label className="text-sm">
         {t("packs")}
         <input type="number" inputMode="numeric" min={minimum} max={MAX_PACKS_PER_LINE} step={1}
@@ -43,9 +44,7 @@ function PacksStepper({ packs, minimum, onChange }: {
           onKeyDown={(event) => { if (event.key === "Enter") event.currentTarget.blur(); }}
           className={`${ui.input} block w-24`} />
       </label>
-      <button type="button" className={cartButton} aria-label={t("increase")}
-        disabled={packs >= MAX_PACKS_PER_LINE} onClick={() => commit(packs + 1)}>+</button>
-    </div>
+    </QuantityStepper>
   );
 }
 
@@ -66,15 +65,15 @@ export function CartLineRow({ line, item, currency, locale, adjusted }: {
     <li className="ui-card p-4">
       {available ? (
         <div className="flex flex-wrap gap-4">
-          <div className="relative grid size-24 shrink-0 place-items-center overflow-hidden rounded-lg bg-subtle text-center text-xs text-muted">
+          <div className="relative grid size-24 shrink-0 place-items-center overflow-hidden rounded-m3-md bg-surface-container text-center text-xs text-on-surface-variant">
             {item.image ? <Image src={item.image} alt={t("imageAlt", { name: item.name, color: item.color })}
-              fill loading="lazy" sizes="96px" className="object-cover" /> : t("noImage")}
+              fill loading="lazy" sizes="96px" className="object-cover" /> : <span><ImageIcon size={20} className="mx-auto mb-1" />{t("noImage")}</span>}
           </div>
           <div className="min-w-0 flex-1 space-y-2">
-            <Link href={`/catalog/${encodeURIComponent(item.slug)}`} className="rounded font-semibold underline-offset-4 hover:underline focus-visible:outline-2">{item.name}</Link>
+            <Link href={`/catalog/${encodeURIComponent(item.slug)}`} className="rounded-m3-xs font-semibold underline-offset-4 hover:underline focus-visible:outline-2">{item.name}</Link>
             <p>{item.color}</p>
-            <p className="text-sm text-muted">{t("pairsPerPack", { count: item.pairsPerPack })}</p>
-            <p className="text-sm text-muted">{t("unitPrices", {
+            <p className="text-sm text-on-surface-variant">{t("pairsPerPack", { count: item.pairsPerPack })}</p>
+            <p className="text-sm text-on-surface-variant">{t("unitPrices", {
               pair: price(item.pricePerPair), pack: price(item.pricePerPair * item.pairsPerPack),
             })}</p>
           </div>
@@ -83,7 +82,7 @@ export function CartLineRow({ line, item, currency, locale, adjusted }: {
       {available && (
         <div className="mt-4 space-y-2">
           {(adjusted || line.packs < item.minPacks) && (
-            <p role="status" className="text-sm text-warning">{t("raisedMinimum", { count: item.minPacks })}</p>
+            <p role="status" className="text-sm text-tertiary">{t("raisedMinimum", { count: item.minPacks })}</p>
           )}
           <PacksStepper packs={packs} minimum={item.minPacks} onChange={(quantity) => setPacks(line, quantity)} />
           <p className="font-semibold">{t("lineTotal", {
@@ -92,7 +91,7 @@ export function CartLineRow({ line, item, currency, locale, adjusted }: {
           })}</p>
         </div>
       )}
-      <button type="button" className={`${ui.danger} mt-3`} onClick={() => remove(line)}>{t("remove")}</button>
+      <button type="button" className={`${ui.danger} mt-3`} onClick={() => remove(line)}><DeleteIcon size={18} />{t("remove")}</button>
     </li>
   );
 }

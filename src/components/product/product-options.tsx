@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowForwardIcon, CartIcon, CheckCircleIcon, ImageIcon } from "@/components/ui/icons";
 import { ui } from "@/components/ui/styles";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -9,7 +10,7 @@ import { formatPrice, type StoreLocale } from "@/lib/catalog-format";
 import { MAX_PACKS_PER_LINE as maxPacks } from "@/lib/cart";
 import { Link } from "@/lib/navigation";
 import { useCart } from "@/components/cart/cart-provider";
-const buttonStyle = `${ui.secondary} aria-pressed:ring-2 aria-pressed:ring-focus aria-pressed:font-semibold`;
+const buttonStyle = `${ui.secondary} aria-pressed:ring-2 aria-pressed:ring-primary aria-pressed:font-semibold`;
 
 type Color = { id: string; name: string; images: string[] };
 
@@ -47,7 +48,7 @@ export function ProductOptions({
   return (
     <section className="grid gap-6 md:grid-cols-2" aria-label={t("options")}>
       <div>
-        <div className="relative grid aspect-square place-items-center overflow-hidden rounded-xl bg-subtle">
+        <div className="relative grid aspect-square place-items-center overflow-hidden rounded-m3-lg bg-surface-container">
           {image ? (
             <Image
               src={image}
@@ -58,7 +59,7 @@ export function ProductOptions({
               className="object-contain"
             />
           ) : (
-            <p className="px-4 text-center text-sm text-muted">{t("noImage")}</p>
+            <p className="px-4 text-center text-sm text-on-surface-variant"><ImageIcon size={28} className="mx-auto mb-2" />{t("noImage")}</p>
           )}
         </div>
         {color && color.images.length > 1 && (
@@ -118,7 +119,7 @@ export function ProductOptions({
                 className={`${ui.input} mt-2 block w-32`}
               />
             </label>
-            <div role="status" aria-atomic="true" className="space-y-1 border-t border-outline pt-4">
+            <div role="status" aria-atomic="true" className="space-y-1 border-t border-outline-variant pt-4">
               <p>{t("totalPairs", { count: totalPairs })}</p>
               <p className="font-semibold">
                 {t("totalPrice", { price: formatPrice(totalPairs * pricePerPair, currency, locale) })}
@@ -126,9 +127,9 @@ export function ProductOptions({
             </div>
           </>
         ) : (
-          <p className="text-muted">{t("unavailable")}</p>
+          <p className="text-on-surface-variant">{t("unavailable")}</p>
         )}
-        <div className="ui-sticky sticky -mx-4 border-t border-outline bg-surface px-4 pt-3 md:static md:mx-0 md:border-0 md:px-0">
+        <div className="ui-sticky sticky -mx-4 border-t border-outline-variant px-4 pt-3 md:static md:mx-0 md:border-0 md:px-0">
           <button
             type="button"
             disabled={!canChoosePacks}
@@ -137,13 +138,15 @@ export function ProductOptions({
               if (canChoosePacks) setFeedback(add({ productId, colorId: color.id, packs }) ? "added" : "cartLimitReached");
             }}
           >
-            {t("addToCart")}
+            <CartIcon size={18} />{t("addToCart")}
           </button>
-          <div role="status" className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted">
-            {feedback && <span key={feedback}>{t(feedback)}</span>}
+          <div role="status" className="mt-2 flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
+            {feedback && <span key={feedback} className="inline-flex items-center gap-2">
+              {feedback === "added" && <CheckCircleIcon className="check-pop text-success" />}{t(feedback)}
+            </span>}
             {feedback === "added" && (
               <Link href="/cart" prefetch={false} className={ui.link}>
-                {t("goToCart")}
+                <ArrowForwardIcon size={18} />{t("goToCart")}
               </Link>
             )}
           </div>

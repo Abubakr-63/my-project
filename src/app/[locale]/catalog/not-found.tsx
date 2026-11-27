@@ -7,8 +7,8 @@ export default async function CatalogNotFound() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
-      <p className="mt-2 text-muted">{t("description")}</p>
+      <h1 className="text-headline-large font-medium">{t("title")}</h1>
+      <p className="mt-2 text-on-surface-variant">{t("description")}</p>
       <Link
         href="/catalog"
         className={`${ui.link} mt-4`}

@@ -19,7 +19,7 @@ async function ColorForm({ productId, color, locale }: { productId: string; colo
       <NameFields values={color} />
       <SortField value={color?.sort_order} />
       <details className="space-y-2">
-        <summary className="min-h-11 cursor-pointer rounded py-2 text-sm font-medium focus-visible:outline-2">
+        <summary className="min-h-11 cursor-pointer rounded-m3-xs py-2 text-sm font-medium focus-visible:outline-2">
           {t("advancedPhotoOptions")}
         </summary>
         <label className="block">{t("imageUrls")}
@@ -39,12 +39,12 @@ export async function ProductColors({ productId, colors, locale }: {
     <section className="space-y-3">
       <h2 className="text-xl font-semibold">{t("colors")}</h2>
       <details className="space-y-3 ui-card p-4">
-        <summary className="min-h-11 cursor-pointer rounded py-2 font-semibold focus-visible:outline-2">{t("addColor")}</summary>
+        <summary className="min-h-11 cursor-pointer rounded-m3-xs py-2 font-semibold focus-visible:outline-2">{t("addColor")}</summary>
         <ColorForm productId={productId} locale={locale} />
       </details>
       {colors.map((color) => (
         <details key={color.id} className="space-y-3 ui-card p-4">
-          <summary className="min-h-11 cursor-pointer rounded py-2 font-semibold focus-visible:outline-2">{localizedName(color, locale)}</summary>
+          <summary className="min-h-11 cursor-pointer rounded-m3-xs py-2 font-semibold focus-visible:outline-2">{localizedName(color, locale)}</summary>
           <ColorForm productId={productId} color={color} locale={locale} />
         </details>
       ))}

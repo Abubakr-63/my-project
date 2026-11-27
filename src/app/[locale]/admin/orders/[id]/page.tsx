@@ -1,3 +1,5 @@
+import { PhoneIcon } from "@/components/ui/icons";
+import { SendIcon } from "@/components/ui/icons";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -31,20 +33,20 @@ export default async function AdminOrderPage({ params }: PageProps<"/[locale]/ad
   const digits = order.customer_phone.replace(/[^0-9]/g, "");
   const telephone = (order.customer_phone.trimStart().startsWith("+") ? "+" : "") + digits;
   const price = (value: number) => formatPrice(value, currency, locale);
-  const contact = "inline-flex min-h-11 items-center rounded underline underline-offset-4 focus-visible:outline-2";
+  const contact = "inline-flex min-h-11 items-center rounded-m3-xs underline underline-offset-4 focus-visible:outline-2";
 
   return (
     <>
       <AdminNav locale={locale} />
-      <h1 className="text-3xl font-semibold">{t("orderNumber", { number: order.order_number })}</h1>
+      <h1 className="text-headline-large font-medium">{t("orderNumber", { number: order.order_number })}</h1>
       <dl className="grid gap-x-6 gap-y-3 ui-card p-4 sm:grid-cols-2">
         <div><dt className="font-semibold">{t("date")}</dt><dd><time dateTime={order.created_at}>{formatOrderDate(order.created_at, locale)}</time></dd></div>
         <div><dt className="font-semibold">{t("customer")}</dt><dd>{order.customer_name}</dd></div>
         <div>
           <dt className="font-semibold">{t("phone")}</dt>
           <dd className="flex flex-wrap gap-x-4">
-            {digits ? <a href={`tel:${telephone}`} className={contact}>{order.customer_phone}</a> : order.customer_phone}
-            {digits && <a href={`https://wa.me/${digits}`} target="_blank" rel="noopener noreferrer" className={contact}>{t("whatsapp")}</a>}
+            {digits ? <a href={`tel:${telephone}`} className={contact}><PhoneIcon size={18} />{order.customer_phone}</a> : order.customer_phone}
+            {digits && <a href={`https://wa.me/${digits}`} target="_blank" rel="noopener noreferrer" className={contact}><SendIcon size={18} />{t("whatsapp")}</a>}
           </dd>
         </div>
         <div><dt className="font-semibold">{t("locale")}</dt><dd>{t(`languages.${order.locale}`)}</dd></div>
@@ -56,13 +58,13 @@ export default async function AdminOrderPage({ params }: PageProps<"/[locale]/ad
       <div className="overflow-x-auto ui-card">
         <table className="w-full text-left text-sm">
           <caption className="p-3 text-left font-semibold">{t("items")}</caption>
-          <thead className="bg-subtle"><tr>
+          <thead className="bg-surface-container"><tr>
             {(["product", "color", "packs", "pairsPerPack", "unitPrice", "lineTotal"] as const).map((key) => (
               <th key={key} scope="col" className="px-3 py-2">{t(key)}</th>
             ))}
           </tr></thead>
           <tbody>{order.order_items.map((item) => (
-            <tr key={item.id} className="border-t border-outline">
+            <tr key={item.id} className="border-t border-outline-variant">
               <th scope="row" className="px-3 py-2">{item.product_name}</th>
               <td className="px-3 py-2">{item.color_name}</td>
               <td className="px-3 py-2">{item.packs}</td>

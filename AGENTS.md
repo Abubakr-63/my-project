@@ -11,3 +11,7 @@
 - Every admin Server Action re-checks `is_admin()` for the verified user before granting admin access.
 - Never use the Supabase service role key.
 - All admin forms validate on the server; product deletion is blocked when orders exist (FK restrict, SQLSTATE 23503).
+- Use Material 3 color tokens in `src/app/globals.css` and shared controls in `src/components/ui`.
+- Use only the inline SVG icons exported from `src/components/ui/icons.tsx`.
+- Gate CSS motion with the full and reduced tiers. Keep reduced motion static.
+- Show RU, TJ, and EN on the language segments and use translated full names as their accessible labels.

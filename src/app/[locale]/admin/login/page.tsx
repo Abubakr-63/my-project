@@ -17,7 +17,7 @@ export default async function AdminLoginPage({ params, searchParams }: PageProps
 
   return (
     <section className="mx-auto max-w-md space-y-4 ui-card p-5">
-      <h1 className="text-2xl font-semibold">{t("login")}</h1>
+      <h1 className="text-headline-small font-medium">{t("login")}</h1>
       {signOutFailed && <p role="alert">{t("signOutError")}</p>}
       {access.user ? (
         <>

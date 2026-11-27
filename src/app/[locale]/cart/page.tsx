@@ -20,7 +20,7 @@ export default async function CartPage({ params }: PageProps<"/[locale]/cart">) 
 
   return (
     <main className="mx-auto max-w-3xl space-y-5 px-4 py-8 sm:px-6 sm:py-12">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="text-headline-large font-medium">{t("title")}</h1>
       <NextIntlClientProvider messages={{ Cart }}>
         <CartView locale={locale} />
       </NextIntlClientProvider>

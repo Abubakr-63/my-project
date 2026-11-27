@@ -1,8 +1,9 @@
+const maxOriginalBytes = 25 * 1024 * 1024;
 const maxCompressedBytes = 300 * 1024;
 
 type CompressionResult =
   | { blob: Blob; belowRecommended: boolean }
-  | { error: "imageInvalid" | "imageTooSmall" | "imageTooLarge" };
+  | { error: "imageInvalid" | "imageOriginalTooLarge" | "imageTooSmall" | "imageTooLarge" };
 
 async function decode(file: File) {
   if (typeof createImageBitmap === "function") {
@@ -38,6 +39,7 @@ function encode(canvas: HTMLCanvasElement, type: string, quality: number) {
 
 export async function compressColorImage(file: File): Promise<CompressionResult> {
   if (!file.size) return { error: "imageInvalid" };
+  if (file.size > maxOriginalBytes) return { error: "imageOriginalTooLarge" };
 
   try {
     const image = await decode(file);
@@ -59,7 +61,7 @@ export async function compressColorImage(file: File): Promise<CompressionResult>
         function paintBackground() {
           if (!context) return;
           context.globalCompositeOperation = "destination-over";
-          context.fillStyle = "#fff";
+          context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--image-matte").trim();
           context.fillRect(0, 0, canvas.width, canvas.height);
         }
 
