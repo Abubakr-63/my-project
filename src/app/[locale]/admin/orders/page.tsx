@@ -1,3 +1,4 @@
+import { ui } from "@/components/ui/styles";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -38,7 +39,7 @@ export default async function AdminOrdersPage({ params, searchParams }: PageProp
   const pageLink = (page: number) => ({
     pathname: "/admin/orders", query: { page, status: filter.status, q: filter.q },
   });
-  const control = "min-h-11 rounded-md border border-stone-300 bg-white px-3 focus-visible:outline-2";
+  const control = ui.secondary;
 
   return (
     <>
@@ -46,10 +47,10 @@ export default async function AdminOrdersPage({ params, searchParams }: PageProp
       <h1 className="text-3xl font-semibold">{t("orders")}</h1>
       <form method="get" action={`/${locale}/admin/orders`} className="flex flex-wrap items-end gap-3">
         <label className="flex min-w-0 flex-1 basis-56 flex-col gap-1">{t("search")}
-          <input name="q" type="search" maxLength={40} defaultValue={filter.q} className={control} />
+          <input name="q" type="search" maxLength={40} defaultValue={filter.q} className={ui.input} />
         </label>
         <label className="flex flex-col gap-1">{t("status")}
-          <select name="status" defaultValue={filter.status} className={control}>
+          <select name="status" defaultValue={filter.status} className={ui.select}>
             <option value="all">{t("all")}</option>
             {orderStatuses.map((status) => <option key={status} value={status}>{t(`statuses.${status}`)}</option>)}
           </select>

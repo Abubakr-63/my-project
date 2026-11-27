@@ -37,9 +37,9 @@ export default async function CatalogPage({ params, searchParams }: PageProps<"/
           ))}
         </ul>
       ) : (
-        <div className="rounded-xl border border-stone-200 bg-white px-5 py-12 text-center">
+        <div className="ui-card px-5 py-12 text-center">
           <h2 className="text-lg font-semibold">{t("emptyTitle")}</h2>
-          <p className="mt-2 text-sm text-stone-600">{t("emptyDescription")}</p>
+          <p className="mt-2 text-sm text-muted">{t("emptyDescription")}</p>
         </div>
       )}
       <CatalogPagination filters={filters} pages={pages} />

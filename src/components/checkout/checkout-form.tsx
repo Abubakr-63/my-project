@@ -1,5 +1,6 @@
 "use client";
 
+import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent } from "react";
@@ -71,10 +72,10 @@ export function CheckoutForm({ locale }: { locale: StoreLocale }) {
     }
   }
 
-  const inputStyle = "mt-1 block min-h-11 w-full rounded-md border border-stone-300 px-3 focus-visible:outline-2";
+  const inputStyle = `${ui.input} mt-1 block w-full`;
   return (
-    <form onSubmit={onSubmit} noValidate aria-busy={pending} className="space-y-4 rounded-xl border border-stone-200 bg-white p-5">
-      <section className="space-y-2 border-b border-stone-200 pb-4" aria-labelledby="checkout-summary">
+    <form onSubmit={onSubmit} noValidate aria-busy={pending} className="space-y-4 ui-card p-5">
+      <section className="space-y-2 border-b border-outline pb-4" aria-labelledby="checkout-summary">
         <h2 id="checkout-summary" className="font-semibold">{t("summary")}</h2>
         <div aria-live="polite" className="space-y-2">
           {!lines.length && <p>{t("empty")}</p>}
@@ -124,10 +125,10 @@ export function CheckoutForm({ locale }: { locale: StoreLocale }) {
       />
       <p role="alert">{error && t(error)}</p>
       <div className="flex flex-wrap items-center gap-4">
-        <button disabled={pending || !canSubmit} className="min-h-11 rounded-md bg-stone-900 px-4 text-white focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50">
+        <button disabled={pending || !canSubmit} className={ui.primary}>
           {t(pending ? "sending" : "submit")}
         </button>
-        <Link href="/cart" className="inline-flex min-h-11 items-center underline focus-visible:outline-2">{t("back")}</Link>
+        <Link href="/cart" prefetch={false} className={ui.link}>{t("back")}</Link>
       </div>
     </form>
   );

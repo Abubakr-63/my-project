@@ -1,4 +1,10 @@
 {
+  "Theme": {
+    "label": "Цветовая тема",
+    "system": "Системная",
+    "light": "Светлая",
+    "dark": "Тёмная"
+  },
   "Site": { "name": "Линия обуви", "description": "Женская обувь оптом" },
   "Menu": { "catalog": "Каталог", "home": "Главная" },
   "Buttons": { "continue": "Продолжить" },
@@ -149,6 +155,14 @@
     "remaining": "и ещё {count} позиций (полный список в заказе)"
   },
   "Admin": {
+    "choosePhotos": "Выбрать фото",
+    "takePhoto": "Сделать фото",
+    "stagedPhotoAlt": "Предпросмотр {name}",
+    "removeStagedPhoto": "Убрать подготовленное фото {name}",
+    "imageReady": "Готово к загрузке",
+    "imageBelowRecommended": "Размер меньше рекомендованных 600 × 315 пикселей для предпросмотра в WhatsApp.",
+    "addAnotherColor": "Добавить ещё один цвет",
+    "advancedPhotoOptions": "Дополнительно",
     "colorImages": "Фото цвета",
     "colorImageAlt": "{color}, фото {number}",
     "imagePreviewUnavailable": "Предпросмотр фото {number} недоступен.",
@@ -165,7 +179,7 @@
     "imageDone": "Готово",
     "imageInvalid": "Недопустимый файл изображения.",
     "imageOriginalTooLarge": "Исходный файл больше 15 МБ.",
-    "imageTooSmall": "Размер изображения должен быть не менее 600 × 315 пикселей.",
+    "imageTooSmall": "Длинная сторона изображения должна быть не меньше 300 пикселей.",
     "imageTooLarge": "Изображение слишком большое.",
     "imageLimit": "Для этого цвета уже добавлено 10 фото.",
     "imageNotFound": "Цвет или изображение не найдено.",

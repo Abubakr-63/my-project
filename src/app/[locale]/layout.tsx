@@ -5,6 +5,8 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { Header } from "@/components/header";
+import { locales } from "@/lib/locales";
+import { themeBootstrap } from "@/lib/theme";
 import { routing } from "@/lib/routing";
 import "../globals.css";
 
@@ -33,8 +35,9 @@ export default async function LocaleLayout({
   const { CartLink } = await getMessages({ locale });
 
   return (
-    <html lang={locale}>
-      <body className="min-h-screen bg-stone-50 text-stone-900 antialiased">
+    <html lang={locales[locale].htmlLang} suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: themeBootstrap }} /></head>
+      <body className="min-h-screen bg-page text-ink antialiased">
         <NextIntlClientProvider messages={{ CartLink }}>
           <CartProvider>
             <Header locale={locale} />

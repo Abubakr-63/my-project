@@ -1,4 +1,10 @@
 {
+  "Theme": {
+    "label": "Мавзӯи ранг",
+    "system": "Системавӣ",
+    "light": "Равшан",
+    "dark": "Торик"
+  },
   "Site": { "name": "Хатти пойафзол", "description": "Пойафзоли занона яклухт" },
   "Menu": { "catalog": "Каталог", "home": "Саҳифаи асосӣ" },
   "Buttons": { "continue": "Идома додан" },
@@ -141,6 +147,14 @@
     "invalid": "Рақами фармоиш нодуруст аст"
   },
   "Admin": {
+    "choosePhotos": "Интихоби аксҳо",
+    "takePhoto": "Акс гирифтан",
+    "stagedPhotoAlt": "Пешнамоиши {name}",
+    "removeStagedPhoto": "Нест кардани акси омодашудаи {name}",
+    "imageReady": "Барои боркунӣ тайёр",
+    "imageBelowRecommended": "Андоза аз 600 × 315 пиксели тавсияшуда барои WhatsApp хурдтар аст.",
+    "addAnotherColor": "Илова кардани ранги дигар",
+    "advancedPhotoOptions": "Иловагӣ",
     "colorImages": "Аксҳои ранг",
     "colorImageAlt": "{color}, акси {number}",
     "imagePreviewUnavailable": "Акси {number} намоиш дода намешавад.",
@@ -157,7 +171,7 @@
     "imageDone": "Тайёр",
     "imageInvalid": "Файли акс нодуруст аст.",
     "imageOriginalTooLarge": "Файли аслӣ аз 15 МБ калон аст.",
-    "imageTooSmall": "Акс бояд на камтар аз 600 × 315 пиксел бошад.",
+    "imageTooSmall": "Тарафи дарози акс бояд на камтар аз 300 пиксел бошад.",
     "imageTooLarge": "Акс аз ҳад калон аст.",
     "imageLimit": "Ин ранг аллакай 10 акс дорад.",
     "imageNotFound": "Ранг ё акс ёфт нашуд.",

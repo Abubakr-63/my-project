@@ -16,7 +16,7 @@ export default async function AdminLoginPage({ params, searchParams }: PageProps
   if (access.allowed && !signOutFailed) redirect(`/${locale}/admin/orders`);
 
   return (
-    <section className="mx-auto max-w-md space-y-4 rounded-xl border border-stone-200 bg-white p-5">
+    <section className="mx-auto max-w-md space-y-4 ui-card p-5">
       <h1 className="text-2xl font-semibold">{t("login")}</h1>
       {signOutFailed && <p role="alert">{t("signOutError")}</p>}
       {access.user ? (

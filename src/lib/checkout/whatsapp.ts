@@ -1,8 +1,9 @@
 import { createTranslator } from "next-intl";
 import ru from "@/messages/ru.json";
+import { locales } from "@/lib/locales";
 import type { OrderSummary } from "./summary";
 
-const t = createTranslator({ locale: "ru", messages: { WhatsApp: ru.WhatsApp }, namespace: "WhatsApp" });
+const t = createTranslator({ locale: locales.ru.intlLocale, messages: { WhatsApp: ru.WhatsApp }, namespace: "WhatsApp" });
 const MAX_MESSAGE_LINES = 15;
 const MAX_LINK_LENGTH = 7000;
 
@@ -24,7 +25,7 @@ export function whatsAppLink(phone: string, orderNumber: string, summary: OrderS
   const heading = t("order", { orderNumber });
   if (!summary) return base + encodeURIComponent(heading);
 
-  const money = new Intl.NumberFormat("ru", { maximumFractionDigits: 2 });
+  const money = new Intl.NumberFormat(locales.ru.intlLocale, { maximumFractionDigits: 2 });
   const header = [
     heading,
     t("name", { name: singleLine(summary.customerName) }),

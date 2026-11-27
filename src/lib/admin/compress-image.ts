@@ -1,16 +1,17 @@
-const types = ["image/jpeg", "image/png", "image/webp"];
-const maxOriginalBytes = 15 * 1024 * 1024;
 const maxCompressedBytes = 300 * 1024;
-const qualities = [0.85, 0.75, 0.65, 0.55, 0.5];
 
 type CompressionResult =
-  | { blob: Blob }
-  | { error: "imageInvalid" | "imageOriginalTooLarge" | "imageTooSmall" | "imageTooLarge" };
+  | { blob: Blob; belowRecommended: boolean }
+  | { error: "imageInvalid" | "imageTooSmall" | "imageTooLarge" };
 
 async function decode(file: File) {
   if (typeof createImageBitmap === "function") {
-    const bitmap = await createImageBitmap(file);
-    return { source: bitmap, width: bitmap.width, height: bitmap.height, release: () => bitmap.close() };
+    try {
+      const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+      return { source: bitmap, width: bitmap.width, height: bitmap.height, release: () => bitmap.close() };
+    } catch {
+      // Some browsers can decode formats with Image that createImageBitmap rejects.
+    }
   }
 
   const image = new Image();
@@ -21,9 +22,13 @@ async function decode(file: File) {
       image.onerror = () => reject(new Error("Could not decode image"));
       image.src = url;
     });
-    return { source: image, width: image.naturalWidth, height: image.naturalHeight, release: () => {} };
-  } finally {
+    return {
+      source: image, width: image.naturalWidth, height: image.naturalHeight,
+      release: () => URL.revokeObjectURL(url),
+    };
+  } catch (error) {
     URL.revokeObjectURL(url);
+    throw error;
   }
 }
 
@@ -32,42 +37,65 @@ function encode(canvas: HTMLCanvasElement, type: string, quality: number) {
 }
 
 export async function compressColorImage(file: File): Promise<CompressionResult> {
-  if (!types.includes(file.type) || !file.size) return { error: "imageInvalid" };
-  if (file.size > maxOriginalBytes) return { error: "imageOriginalTooLarge" };
+  if (!file.size) return { error: "imageInvalid" };
 
   try {
     const image = await decode(file);
     try {
-      if (image.width < 600 || image.height < 315) return { error: "imageTooSmall" };
+      const longestSide = Math.max(image.width, image.height);
+      if (longestSide < 300) return { error: "imageTooSmall" };
+
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
       if (!context) return { error: "imageInvalid" };
 
-      let scale = Math.min(1, 1600 / Math.max(image.width, image.height));
+      let scale = Math.min(1, 1600 / longestSide);
       let type = "image/webp";
-      for (let attempt = 0; attempt < 6; attempt++) {
+      for (let round = 0; round < 4; round++) {
         canvas.width = Math.max(1, Math.round(image.width * scale));
         canvas.height = Math.max(1, Math.round(image.height * scale));
         context.drawImage(image.source, 0, 0, canvas.width, canvas.height);
 
-        const paintBackground = () => {
+        function paintBackground() {
+          if (!context) return;
           context.globalCompositeOperation = "destination-over";
           context.fillStyle = "#fff";
           context.fillRect(0, 0, canvas.width, canvas.height);
-        };
+        }
+
         if (type === "image/jpeg") paintBackground();
 
-        for (const quality of qualities) {
-          let blob = await encode(canvas, type, quality);
-          if (type === "image/webp" && blob?.type !== type) {
-            type = "image/jpeg";
-            paintBackground();
-            blob = await encode(canvas, type, quality);
-          }
-          if (!blob || blob.type !== type || !blob.size) return { error: "imageInvalid" };
-          if (blob.size <= maxCompressedBytes) return { blob };
+        let best = await encode(canvas, type, 0.9);
+        if (type === "image/webp" && best?.type !== type) {
+          type = "image/jpeg";
+          paintBackground();
+          best = await encode(canvas, type, 0.9);
         }
-        scale *= 0.8;
+        if (!best || best.type !== type || !best.size) return { error: "imageInvalid" };
+
+        if (best.size > maxCompressedBytes) {
+          best = await encode(canvas, type, 0.5);
+          if (!best || best.type !== type || !best.size) return { error: "imageInvalid" };
+          if (best.size > maxCompressedBytes) {
+            scale *= 0.85;
+            continue;
+          }
+
+          let low = 0.5;
+          let high = 0.9;
+          for (let step = 0; step < 6; step++) {
+            const quality = (low + high) / 2;
+            const candidate = await encode(canvas, type, quality);
+            if (!candidate || candidate.type !== type || !candidate.size) return { error: "imageInvalid" };
+            if (candidate.size <= maxCompressedBytes) {
+              low = quality;
+              best = candidate;
+            } else {
+              high = quality;
+            }
+          }
+        }
+        return { blob: best, belowRecommended: canvas.width < 600 || canvas.height < 315 };
       }
       return { error: "imageTooLarge" };
     } finally {

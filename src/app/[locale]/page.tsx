@@ -10,7 +10,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl">
         {t("title")}
       </h1>
-      <p className="mt-5 max-w-xl text-lg leading-relaxed text-stone-600">
+      <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">
         {t("description")}
       </p>
     </main>

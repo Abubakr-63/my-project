@@ -1,27 +1,33 @@
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/lib/navigation";
-import { routing } from "@/lib/routing";
+"use client";
 
-export async function LanguageSwitcher({
-  locale,
-}: {
-  locale: (typeof routing.locales)[number];
+import { useSearchParams } from "next/navigation";
+import { locales, routeLocales, type StoreLocale } from "@/lib/locales";
+import { ui } from "./ui/styles";
+import { Link, usePathname } from "@/lib/navigation";
+
+export function LanguageSwitcher({ locale, label, names }: {
+  locale: StoreLocale;
+  label: string;
+  names: Record<StoreLocale, string>;
 }) {
-  const t = await getTranslations("Languages");
+  const pathname = usePathname();
+  const query = useSearchParams().toString();
+  const href = query ? `${pathname}?${query}` : pathname;
 
   return (
-    <nav aria-label={t("label")} className="flex flex-wrap gap-1">
-      {routing.locales.map((option) => (
+    <nav aria-label={label} className="flex flex-wrap gap-1">
+      {routeLocales.map((option) => (
         <Link
           key={option}
-          href="/"
+          href={href}
           locale={option}
-          lang={option}
-          hrefLang={option}
+          prefetch={false}
+          lang={locales[option].htmlLang}
+          hrefLang={locales[option].hreflang}
           aria-current={locale === option ? "page" : undefined}
-          className="rounded-md px-3 py-3 text-sm hover:bg-stone-100 aria-[current=page]:bg-stone-200 aria-[current=page]:font-semibold"
+          className={`${ui.ghost} aria-[current=page]:bg-subtle aria-[current=page]:font-semibold`}
         >
-          {t(option)}
+          {names[option]}
         </Link>
       ))}
     </nav>

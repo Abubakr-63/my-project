@@ -65,22 +65,24 @@ export async function setProductActive(id: string, active: boolean): Promise<Cat
   return saved;
 }
 
-export async function saveColor(productId: string, id: string | null, form: FormData): Promise<CatalogResult> {
+export async function saveColor(productId: string, id: string | null, form: FormData): Promise<Extract<CatalogResult, { ok: false }> | { ok: true; colorId: string }> {
   const { supabase } = await adminCatalogContext();
   const values = form instanceof FormData ? validateColor(form, process.env.NEXT_PUBLIC_SUPABASE_URL) : null;
   if (!values || !isCartId(productId) || (id !== null && !isCartId(id))) return invalid;
 
+  let colorId: string;
   try {
     const table = supabase.from("product_colors");
     const { data, error } = await (id
       ? table.update(values).eq("id", id).eq("product_id", productId)
       : table.insert({ ...values, product_id: productId })).select("id").maybeSingle();
     if (error || !data) return catalogMutationError(error);
+    colorId = data.id;
   } catch {
     return catalogMutationError(null);
   }
   revalidateCatalog();
-  return saved;
+  return { ok: true, colorId };
 }
 
 export async function removeColor(id: string): Promise<CatalogResult> {

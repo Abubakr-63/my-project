@@ -1,4 +1,4 @@
-import type { StoreLocale } from "@/lib/catalog-format";
+import { locales, type StoreLocale } from "@/lib/locales";
 import type { Database } from "@/lib/database.types";
 import { validOrderNumber } from "@/lib/checkout/summary";
 
@@ -27,7 +27,7 @@ export function orderFilters(params: Record<string, string | string[] | undefine
 }
 
 export function formatOrderDate(value: string, locale: StoreLocale) {
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(locales[locale].intlLocale, {
     dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dushanbe",
   }).format(new Date(value));
 }

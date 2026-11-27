@@ -44,7 +44,7 @@ export async function ProductForm({ product, categories, locale }: {
         <label>{t("sizeRange")}
           <input name="size_range" maxLength={20} pattern="[0-9]{2,3}(-[0-9]{2,3})?" required
             aria-describedby="admin-size-range-hint" defaultValue={product?.size_range ?? ""} className={fieldClass} />
-          <span id="admin-size-range-hint" className="mt-1 block text-sm text-stone-600">{t("sizeRangeHint")}</span>
+          <span id="admin-size-range-hint" className="mt-1 block text-sm text-muted">{t("sizeRangeHint")}</span>
         </label>
       </div>
       <div className="grid gap-3 sm:grid-cols-3">

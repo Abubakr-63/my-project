@@ -1,13 +1,13 @@
-import type { routing } from "./routing";
+import { locales, type DatabaseLocale, type StoreLocale } from "./locales";
 
-export type StoreLocale = (typeof routing.locales)[number];
+export type { StoreLocale } from "./locales";
 
 export function localizedField<Field extends "name" | "description">(
-  item: Record<`${Field}_${StoreLocale}`, string | null>,
+  item: Record<`${Field}_${DatabaseLocale}`, string | null>,
   field: Field,
   locale: StoreLocale,
 ) {
-  return item[`${field}_${locale}`]?.trim() || item[`${field}_ru`]?.trim() || null;
+  return item[`${field}_${locales[locale].dbLocale}`]?.trim() || item[`${field}_ru`]?.trim() || null;
 }
 
 export function localizedName(
@@ -18,7 +18,7 @@ export function localizedName(
 }
 
 export function formatPrice(amount: number, currency: string, locale: StoreLocale) {
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(locales[locale].intlLocale, {
     style: "currency",
     currency,
     currencyDisplay: "code",

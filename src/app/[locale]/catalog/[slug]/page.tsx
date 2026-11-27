@@ -1,15 +1,16 @@
+import { ui } from "@/components/ui/styles";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { ProductOptions } from "@/components/product/product-options";
 import { formatPrice, localizedField, localizedName } from "@/lib/catalog-format";
+import { locales } from "@/lib/locales";
 import { Link } from "@/lib/navigation";
 import { loadProductDetail } from "@/lib/product-detail";
 import { routing } from "@/lib/routing";
 
 type ProductPageProps = PageProps<"/[locale]/catalog/[slug]">;
-const openGraphLocales = { ru: "ru_RU", tg: "tg_TJ", en: "en_US" };
 
 function previewDescription(value: string) {
   const text = value.replace(/\s+/g, " ").trim();
@@ -38,12 +39,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   );
 
   const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000");
-  const languages = {
-    ru: new URL(`/ru/catalog/${encodeURIComponent(product.slug)}`, siteUrl).href,
-    tg: new URL(`/tg/catalog/${encodeURIComponent(product.slug)}`, siteUrl).href,
-    en: new URL(`/en/catalog/${encodeURIComponent(product.slug)}`, siteUrl).href,
-  };
-  const url = languages[locale];
+  const urlFor = (routeLocale: keyof typeof locales) =>
+    new URL(`/${routeLocale}/catalog/${encodeURIComponent(product.slug)}`, siteUrl).href;
+  const languages = Object.fromEntries(routing.locales.map((routeLocale) => [
+    locales[routeLocale].hreflang, urlFor(routeLocale),
+  ]));
+  const url = urlFor(locale);
   const image = firstImage
     ? { url: firstImage, alt: t("Catalog.imageAlt", { name }) }
     : {
@@ -56,10 +57,10 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   return {
     title,
     description,
-    alternates: { canonical: url, languages: { ...languages, "x-default": languages.ru } },
+    alternates: { canonical: url, languages: { ...languages, "x-default": urlFor(routing.defaultLocale) } },
     openGraph: {
       type: "website", title, description, url, siteName,
-      locale: openGraphLocales[locale], images: [image],
+      locale: locales[locale].ogLocale, images: [image],
     },
     twitter: { card: "summary_large_image", title, description, images: [image] },
   };
@@ -85,15 +86,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="mb-6">
         <Link
           href={{ pathname: "/catalog", query: { category: product.categories.slug } }}
-          className="inline-block rounded py-2 text-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-700"
+          className={ui.link}
         >
           {localizedName(product.categories, locale)}
         </Link>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{name}</h1>
-        {description && <p className="mt-3 max-w-3xl whitespace-pre-line text-stone-700">{description}</p>}
+        {description && <p className="mt-3 max-w-3xl whitespace-pre-line text-muted">{description}</p>}
       </div>
 
-      <ul className="mb-6 flex flex-wrap gap-x-6 gap-y-2 rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-700">
+      <ul className="mb-6 flex flex-wrap gap-x-6 gap-y-2 ui-card p-4 text-sm text-muted">
         <li>{t("Product.season", { season: t(`Catalog.seasons.${product.season}`) })}</li>
         <li>{t("Catalog.sizes", { range: product.size_range })}</li>
         <li>{t("Catalog.pairsPerPack", { count: product.pairs_per_pack })}</li>

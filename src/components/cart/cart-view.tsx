@@ -1,5 +1,6 @@
 "use client";
 
+import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { lineKey, MAX_PACKS_PER_LINE } from "@/lib/cart";
@@ -38,7 +39,7 @@ export function CartView({ locale }: { locale: StoreLocale }) {
 
   if (!ready) return <p role="status">{t("loading")}</p>;
   if (!lines.length) return (
-    <div className="space-y-3 rounded-xl border border-stone-200 bg-white p-5">
+    <div className="space-y-3 ui-card p-5">
       <p>{t("empty")}</p>
       <Link href="/catalog" className={cartButton}>{t("browse")}</Link>
     </div>
@@ -61,7 +62,7 @@ export function CartView({ locale }: { locale: StoreLocale }) {
       {confirmClear ? (
         <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t("confirmClear")}>
           <p>{t("confirmClear")}</p>
-          <button type="button" className={cartButton} onClick={() => {
+          <button type="button" className={ui.danger} onClick={() => {
             clear();
             setConfirmClear(false);
             setAdjusted({});
@@ -87,18 +88,18 @@ export function CartView({ locale }: { locale: StoreLocale }) {
                 locale={locale} adjusted={adjusted[id] === item?.minPacks && adjusted[id] !== undefined} />;
             })}
           </ul>
-          <section className="space-y-3 rounded-xl border border-stone-200 bg-white p-5">
+          <section className="ui-card ui-sticky sticky space-y-2 p-3 shadow-md md:static md:p-5 md:shadow-none">
             <h2 className="font-semibold">{t("summary")}</h2>
             <div role="status" aria-atomic="true" className="space-y-1">
               <p>{t("totalPairs", { count: totalPairs })}</p>
               <p className="font-semibold">{t("totalAmount", { price: formatPrice(totalCents / 100, details.currency, locale) })}</p>
               {totalCents < Math.round(details.minimumOrderAmount * 100) && (
-                <p className="text-amber-900">{t("minimumAmount", { price: formatPrice(details.minimumOrderAmount, details.currency, locale) })}</p>
+                <p className="text-warning">{t("minimumAmount", { price: formatPrice(details.minimumOrderAmount, details.currency, locale) })}</p>
               )}
             </div>
             {validatedLines.length === lines.length && validatedLines.every((line, index) => line.packs === lines[index].packs) && totalCents >= Math.round(details.minimumOrderAmount * 100)
-              ? <Link href="/checkout" className={cartButton}>{t("checkout")}</Link>
-              : <button type="button" className={cartButton} disabled>{t("checkout")}</button>}
+              ? <Link href="/checkout" prefetch={false} className={`${ui.primary} w-full sm:w-auto`}>{t("checkout")}</Link>
+              : <button type="button" className={`${ui.primary} w-full sm:w-auto`} disabled>{t("checkout")}</button>}
           </section>
         </>
       )}

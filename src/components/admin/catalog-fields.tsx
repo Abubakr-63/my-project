@@ -1,6 +1,7 @@
+import { ui } from "@/components/ui/styles";
 import { getTranslations } from "next-intl/server";
 
-export const fieldClass = "mt-1 block min-h-11 w-full rounded-md border border-stone-300 bg-white px-3 py-2 focus-visible:outline-2";
+export const fieldClass = `${ui.input} mt-1 block w-full`;
 
 type Names = { name_ru: string; name_tg: string | null; name_en: string | null };
 

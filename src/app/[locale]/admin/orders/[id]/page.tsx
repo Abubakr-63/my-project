@@ -37,7 +37,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/[locale]/ad
     <>
       <AdminNav locale={locale} />
       <h1 className="text-3xl font-semibold">{t("orderNumber", { number: order.order_number })}</h1>
-      <dl className="grid gap-x-6 gap-y-3 rounded-xl border border-stone-200 bg-white p-4 sm:grid-cols-2">
+      <dl className="grid gap-x-6 gap-y-3 ui-card p-4 sm:grid-cols-2">
         <div><dt className="font-semibold">{t("date")}</dt><dd><time dateTime={order.created_at}>{formatOrderDate(order.created_at, locale)}</time></dd></div>
         <div><dt className="font-semibold">{t("customer")}</dt><dd>{order.customer_name}</dd></div>
         <div>
@@ -53,16 +53,16 @@ export default async function AdminOrderPage({ params }: PageProps<"/[locale]/ad
         <div><dt className="font-semibold">{t("total")}</dt><dd>{price(order.total_amount)}</dd></div>
       </dl>
       <OrderStatusForm id={id} status={order.status} />
-      <div className="overflow-x-auto rounded-xl border border-stone-200 bg-white">
+      <div className="overflow-x-auto ui-card">
         <table className="w-full text-left text-sm">
           <caption className="p-3 text-left font-semibold">{t("items")}</caption>
-          <thead className="bg-stone-100"><tr>
+          <thead className="bg-subtle"><tr>
             {(["product", "color", "packs", "pairsPerPack", "unitPrice", "lineTotal"] as const).map((key) => (
               <th key={key} scope="col" className="px-3 py-2">{t(key)}</th>
             ))}
           </tr></thead>
           <tbody>{order.order_items.map((item) => (
-            <tr key={item.id} className="border-t border-stone-200">
+            <tr key={item.id} className="border-t border-outline">
               <th scope="row" className="px-3 py-2">{item.product_name}</th>
               <td className="px-3 py-2">{item.color_name}</td>
               <td className="px-3 py-2">{item.packs}</td>

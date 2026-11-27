@@ -1,5 +1,6 @@
 "use client";
 
+import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, type ReactNode } from "react";
@@ -29,11 +30,11 @@ export function CatalogForm({ action, children, label = "saveCatalog", confirm =
       }}>
       {children}
       <button type="submit" disabled={pending}
-        className="min-h-11 rounded-md border border-stone-300 bg-white px-4 hover:bg-stone-100 focus-visible:outline-2 disabled:opacity-50">
+        className={label === "delete" ? ui.danger : ui.secondary}>
         {t(pending ? "saving" : label)}
       </button>
       <p role="status" className="text-sm">{!pending && result?.ok && t("catalogSaved")}</p>
-      {!pending && result && !result.ok && <p role="alert" className="text-sm text-red-800">{t(result.error)}</p>}
+      {!pending && result && !result.ok && <p role="alert" className="text-sm text-danger">{t(result.error)}</p>}
     </form>
   );
 }

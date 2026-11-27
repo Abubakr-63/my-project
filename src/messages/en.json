@@ -1,4 +1,10 @@
 {
+  "Theme": {
+    "label": "Color theme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "Site": { "name": "Shoe Line", "description": "Wholesale women's shoes" },
   "Menu": { "catalog": "Catalog", "home": "Home" },
   "Buttons": { "continue": "Continue" },
@@ -141,6 +147,14 @@
     "invalid": "Invalid order number"
   },
   "Admin": {
+    "choosePhotos": "Choose photos",
+    "takePhoto": "Take photo",
+    "stagedPhotoAlt": "Preview of {name}",
+    "removeStagedPhoto": "Remove staged photo {name}",
+    "imageReady": "Ready",
+    "imageBelowRecommended": "Below the recommended 600 × 315 px for WhatsApp previews.",
+    "addAnotherColor": "Add another color",
+    "advancedPhotoOptions": "Advanced",
     "colorImages": "Color images",
     "colorImageAlt": "{color}, image {number}",
     "imagePreviewUnavailable": "Preview unavailable for image {number}.",
@@ -157,7 +171,7 @@
     "imageDone": "Done",
     "imageInvalid": "Invalid image file.",
     "imageOriginalTooLarge": "The original file exceeds 15 MB.",
-    "imageTooSmall": "The image must be at least 600 × 315 px.",
+    "imageTooSmall": "The longest side must be at least 300 px.",
     "imageTooLarge": "The image is too large.",
     "imageLimit": "This color already has 10 images.",
     "imageNotFound": "The color or image was not found.",

@@ -1,1 +1,162 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  color-scheme: light;
+  --page: #f8f7f4;
+  --surface: #ffffff;
+  --subtle: #eeeae3;
+  --skeleton: #e5ded4;
+  --text: #24241f;
+  --muted: #5a554d;
+  --border: #e2dcd2;
+  --control-border: #8a8277;
+  --accent: #285d50;
+  --accent-hover: #204d42;
+  --on-accent: #ffffff;
+  --focus: #176955;
+  --danger: #922d39;
+  --danger-surface: #fae8ea;
+  --warning: #794411;
+  --success: #235f44;
+  --success-surface: #e2f1e7;
+  --shimmer: rgb(255 255 255 / 0.64);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #171916;
+  --surface: #20231e;
+  --subtle: #2b3029;
+  --skeleton: #353c33;
+  --text: #f6f3ec;
+  --muted: #c7c1b5;
+  --border: #3b4238;
+  --control-border: #8e9588;
+  --accent: #a9dec5;
+  --accent-hover: #c3edd9;
+  --on-accent: #14291f;
+  --focus: #a9dec5;
+  --danger: #ffb7c0;
+  --danger-surface: #46252a;
+  --warning: #f6c58e;
+  --success: #a9e5bf;
+  --success-surface: #253d30;
+  --shimmer: rgb(255 255 255 / 0.12);
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
+  --color-skeleton: var(--skeleton);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-outline: var(--border);
+  --color-control: var(--control-border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-focus: var(--focus);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  input, select, textarea {
+    border-color: var(--control-border);
+  }
+
+  button, a, summary, input, select, textarea {
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 140ms ease;
+  }
+
+  button:enabled:active, .ui-button:active {
+    transform: translateY(1px);
+  }
+
+  [role="alert"] { color: var(--danger); }
+
+  button:disabled, fieldset:disabled :is(button, input, select, textarea) {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+@layer components {
+  .ui-button {
+    @apply inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg px-3 py-2 text-sm font-medium;
+  }
+
+  .ui-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .ui-primary:hover { background: var(--accent-hover); }
+
+  .ui-secondary { background: var(--subtle); color: var(--text); }
+  .ui-ghost { color: var(--text); }
+  .ui-ghost:hover { background: var(--subtle); }
+  .ui-secondary:hover { box-shadow: inset 0 0 0 1px var(--control-border); }
+
+  .ui-danger { color: var(--danger); background: var(--danger-surface); }
+  .ui-success { color: var(--success); background: var(--success-surface); }
+
+  .ui-field {
+    @apply min-h-11 min-w-0 rounded-lg border px-3 py-2;
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--control-border);
+  }
+
+  .ui-field::placeholder { color: var(--muted); }
+  .ui-card { @apply rounded-xl border border-outline bg-surface; }
+
+  .ui-interactive-card:hover { border-color: var(--control-border); transform: translateY(-1px); }
+
+  .ui-sticky {
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .ui-skeleton { position: relative; overflow: hidden; background: var(--skeleton); }
+  .ui-skeleton::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: linear-gradient(90deg, transparent, var(--shimmer), transparent);
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+[data-theme-ready] :is(body, .ui-card, header, [class*="bg-surface"], [class*="bg-subtle"]) {
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 140ms ease;
+}
+
+main, details[open] > :not(summary), [role="status"], [role="status"] > *, [role="alert"] {
+  animation: appear 160ms ease-out both;
+}
+
+@keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  button:enabled:active, .ui-button:active, .ui-interactive-card:hover { transform: none; }
+}
+
+@media (max-width: 767px) {
+  :root:has(.ui-sticky) { scroll-padding-bottom: 9rem; }
+  .ui-sticky { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+}

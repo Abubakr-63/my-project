@@ -5,6 +5,7 @@ import { lineKey, validateCartLines } from "@/lib/cart";
 import { loadCartDetails } from "@/lib/cart/load-details";
 import type { OrderSummary } from "@/lib/checkout/summary";
 import { normalizeCheckoutPhone, validCheckoutName } from "@/lib/checkout/validation";
+import { locales } from "@/lib/locales";
 import { routing } from "@/lib/routing";
 import { createClient } from "@/lib/supabase/server";
 
@@ -56,7 +57,7 @@ export async function submitOrder(locale: string, form: FormData, items: unknown
 
     const supabase = await createClient({ anonymous: true });
     const { data, error } = await supabase.rpc("create_order", {
-      p_name: customerName, p_phone: customerPhone, p_locale: locale,
+      p_name: customerName, p_phone: customerPhone, p_locale: locales[locale].dbLocale,
       p_items: lines.map(({ productId, colorId, packs }) => ({
         product_id: productId, color_id: colorId, packs,
       })),

@@ -1,9 +1,10 @@
+import { ui } from "@/components/ui/styles";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/lib/navigation";
 import { seasons, sortOptions, type CatalogCategory, type CatalogQuery } from "@/lib/catalog";
 import { localizedName, type StoreLocale } from "@/lib/catalog-format";
 
-const fieldStyle = "mt-1 w-full min-w-0 rounded-md border border-stone-300 bg-white px-2 py-2 text-base text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-700";
+const fieldStyle = `${ui.input} mt-1 w-full text-base`;
 
 export async function CatalogFilters({
   categories, filters, locale, currency,
@@ -20,7 +21,7 @@ export async function CatalogFilters({
       method="get"
       action={`/${locale}/catalog`}
       aria-label={t("filters")}
-      className="mb-8 rounded-xl border border-stone-200 bg-white p-4 sm:p-5"
+      className="mb-8 ui-card p-4 sm:p-5"
     >
       <div className="grid grid-cols-2 gap-4 text-sm font-medium lg:grid-cols-5">
         <label>
@@ -67,11 +68,11 @@ export async function CatalogFilters({
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <button
           type="submit"
-          className="cursor-pointer rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-stone-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-700"
+          className={ui.primary}
         >
           {t("apply")}
         </button>
-        <Link href="/catalog" className="rounded-md px-3 py-2.5 text-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-700">
+        <Link href="/catalog" className={ui.link}>
           {t("clear")}
         </Link>
       </div>

@@ -21,26 +21,27 @@ export async function ProductCard({
   return (
     <Link
       href={`/catalog/${encodeURIComponent(product.slug)}`}
-      className="group block h-full overflow-hidden rounded-xl border border-stone-200 bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-700"
+      className="group block h-full overflow-hidden ui-card ui-interactive-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
     >
-      <div className="relative grid aspect-square place-items-center bg-stone-100">
+      <div className="relative grid aspect-square place-items-center bg-subtle">
         {image ? (
           <Image
             src={image}
             alt={t("imageAlt", { name })}
             fill
+            loading="lazy"
             sizes="(min-width: 1280px) 270px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
             className="object-cover"
           />
         ) : (
-          <span className="px-2 text-center text-sm text-stone-600">{t("noImage")}</span>
+          <span className="px-2 text-center text-sm text-muted">{t("noImage")}</span>
         )}
       </div>
       <div className="space-y-2 p-3 wrap-anywhere sm:p-4">
         <h2 className="font-semibold group-hover:underline">{name}</h2>
         <p className="font-medium">{t("perPair", { price: pairPrice })}</p>
-        <p className="text-sm text-stone-700">{t("perPack", { price: packPrice })}</p>
-        <div className="space-y-1 border-t border-stone-100 pt-2 text-sm text-stone-600">
+        <p className="text-sm text-muted">{t("perPack", { price: packPrice })}</p>
+        <div className="space-y-1 border-t border-outline pt-2 text-sm text-muted">
           <p>{t("sizes", { range: product.size_range })}</p>
           <p>{t("pairsPerPack", { count: product.pairs_per_pack })}</p>
         </div>

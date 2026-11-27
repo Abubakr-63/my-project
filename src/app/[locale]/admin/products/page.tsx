@@ -1,3 +1,4 @@
+import { ui } from "@/components/ui/styles";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -13,7 +14,7 @@ import { deleteProduct } from "../catalog-actions";
 import { setProductActive } from "../manage-actions";
 
 const PAGE_SIZE = 20;
-const control = "min-h-11 rounded-md border border-stone-300 bg-white px-3 focus-visible:outline-2";
+const control = ui.secondary;
 
 export default async function ProductsPage({ params, searchParams }: PageProps<"/[locale]/admin/products">) {
   const { locale } = await params;
@@ -51,17 +52,17 @@ export default async function ProductsPage({ params, searchParams }: PageProps<"
       </div>
       <form method="get" action={`/${locale}/admin/products`} className="flex flex-wrap items-end gap-3">
         <label className="flex min-w-0 flex-1 basis-56 flex-col gap-1">{t("productSearch")}
-          <input type="search" name="q" maxLength={80} defaultValue={filters.q} className={control} />
+          <input type="search" name="q" maxLength={80} defaultValue={filters.q} className={ui.input} />
         </label>
         <label className="flex flex-col gap-1">{t("status")}
-          <select name="active" defaultValue={filters.status} className={control}>
+          <select name="active" defaultValue={filters.status} className={ui.select}>
             <option value="all">{t("all")}</option>
             <option value="active">{t("active")}</option>
             <option value="inactive">{t("inactive")}</option>
           </select>
         </label>
         <label className="flex min-w-0 flex-col gap-1">{t("categories")}
-          <select name="category" defaultValue={filters.category} className={control}>
+          <select name="category" defaultValue={filters.category} className={ui.select}>
             <option value="">{t("allCategories")}</option>
             {categories.data.map((category) => <option key={category.id} value={category.id}>{localizedName(category, locale)}</option>)}
           </select>
@@ -71,13 +72,13 @@ export default async function ProductsPage({ params, searchParams }: PageProps<"
       {!products.length && <p>{t("noProducts")}</p>}
       <ul className="space-y-2">
         {products.map((product) => (
-          <li key={product.id} className="flex flex-wrap items-start justify-between gap-3 rounded-xl border border-stone-200 bg-white p-4">
+          <li key={product.id} className="flex flex-wrap items-start justify-between gap-3 ui-card p-4">
             <div>
-              <Link prefetch={false} href={`/admin/products/${product.id}`} className="inline-flex min-h-11 items-center underline focus-visible:outline-2">
+              <Link prefetch={false} href={`/admin/products/${product.id}`} className={ui.link}>
                 {localizedName(product, locale)}
               </Link>
-              <p className="text-sm text-stone-700">{formatPrice(product.price_per_pair, currency, locale)}</p>
-              <p className="text-sm text-stone-700">{t(product.is_active ? "active" : "inactive")}</p>
+              <p className="text-sm text-muted">{formatPrice(product.price_per_pair, currency, locale)}</p>
+              <p className="text-sm text-muted">{t(product.is_active ? "active" : "inactive")}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <CatalogForm action={setProductActive.bind(null, product.id, !product.is_active)}

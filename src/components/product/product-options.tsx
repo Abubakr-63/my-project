@@ -1,5 +1,6 @@
 "use client";
 
+import { ui } from "@/components/ui/styles";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -8,7 +9,7 @@ import { formatPrice, type StoreLocale } from "@/lib/catalog-format";
 import { MAX_PACKS_PER_LINE as maxPacks } from "@/lib/cart";
 import { Link } from "@/lib/navigation";
 import { useCart } from "@/components/cart/cart-provider";
-const buttonStyle = "min-h-11 rounded-md border border-stone-300 bg-white px-3 py-2 text-sm hover:bg-stone-100 aria-pressed:border-stone-800 aria-pressed:bg-stone-100 aria-pressed:font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-700 disabled:opacity-50";
+const buttonStyle = `${ui.secondary} aria-pressed:ring-2 aria-pressed:ring-focus aria-pressed:font-semibold`;
 
 type Color = { id: string; name: string; images: string[] };
 
@@ -46,17 +47,18 @@ export function ProductOptions({
   return (
     <section className="grid gap-6 md:grid-cols-2" aria-label={t("options")}>
       <div>
-        <div className="relative grid aspect-square place-items-center overflow-hidden rounded-xl bg-stone-100">
+        <div className="relative grid aspect-square place-items-center overflow-hidden rounded-xl bg-subtle">
           {image ? (
             <Image
               src={image}
               alt={t("photoAlt", { name, color: color.name, number: imageIndex + 1 })}
               fill
+              preload={color.id === colors[0]?.id && imageIndex === 0}
               sizes="(min-width: 1280px) 540px, (min-width: 768px) 50vw, 100vw"
               className="object-contain"
             />
           ) : (
-            <p className="px-4 text-center text-sm text-stone-600">{t("noImage")}</p>
+            <p className="px-4 text-center text-sm text-muted">{t("noImage")}</p>
           )}
         </div>
         {color && color.images.length > 1 && (
@@ -70,13 +72,13 @@ export function ProductOptions({
                 onClick={() => setImageIndex(index)}
                 className={`${buttonStyle} relative size-16 overflow-hidden p-0`}
               >
-                <Image src={source} alt="" fill sizes="64px" className="object-cover" />
+                <Image src={source} alt="" fill loading="lazy" sizes="64px" className="object-cover" />
               </button>
             ))}
           </div>
         )}
       </div>
-      <div className="space-y-5 rounded-xl border border-stone-200 bg-white p-4 sm:p-6">
+      <div className="space-y-5 ui-card p-4 sm:p-6">
         {colors.length > 0 && (
           <fieldset>
             <legend className="mb-2 font-semibold">{t("color")}</legend>
@@ -113,10 +115,10 @@ export function ProductOptions({
                 value={draft}
                 onChange={(event) => setPacks(event.target.value)}
                 onBlur={() => setPacks(String(packs))}
-                className="mt-2 block min-h-11 w-32 rounded-md border border-stone-300 px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-700"
+                className={`${ui.input} mt-2 block w-32`}
               />
             </label>
-            <div role="status" aria-atomic="true" className="space-y-1 border-t border-stone-200 pt-4">
+            <div role="status" aria-atomic="true" className="space-y-1 border-t border-outline pt-4">
               <p>{t("totalPairs", { count: totalPairs })}</p>
               <p className="font-semibold">
                 {t("totalPrice", { price: formatPrice(totalPairs * pricePerPair, currency, locale) })}
@@ -124,23 +126,23 @@ export function ProductOptions({
             </div>
           </>
         ) : (
-          <p className="text-stone-600">{t("unavailable")}</p>
+          <p className="text-muted">{t("unavailable")}</p>
         )}
-        <div>
+        <div className="ui-sticky sticky -mx-4 border-t border-outline bg-surface px-4 pt-3 md:static md:mx-0 md:border-0 md:px-0">
           <button
             type="button"
             disabled={!canChoosePacks}
-            className={buttonStyle}
+            className={`${ui.primary} w-full sm:w-auto`}
             onClick={() => {
               if (canChoosePacks) setFeedback(add({ productId, colorId: color.id, packs }) ? "added" : "cartLimitReached");
             }}
           >
             {t("addToCart")}
           </button>
-          <div role="status" className="mt-2 flex flex-wrap items-center gap-2 text-sm text-stone-700">
-            {feedback && t(feedback)}
+          <div role="status" className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted">
+            {feedback && <span key={feedback}>{t(feedback)}</span>}
             {feedback === "added" && (
-              <Link href="/cart" className="inline-flex min-h-11 items-center rounded underline focus-visible:outline-2">
+              <Link href="/cart" prefetch={false} className={ui.link}>
                 {t("goToCart")}
               </Link>
             )}

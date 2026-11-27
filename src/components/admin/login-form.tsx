@@ -1,5 +1,6 @@
 "use client";
 
+import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { signIn } from "@/app/[locale]/admin/actions";
@@ -12,7 +13,7 @@ export function LoginForm({ locale }: { locale: StoreLocale }) {
     null,
   );
 
-  const field = "mt-1 block min-h-11 w-full rounded-md border border-stone-300 px-3 focus-visible:outline-2";
+  const field = `${ui.input} mt-1 block w-full`;
   const errorId = result ? "admin-login-error" : undefined;
   return (
     <form action={action} aria-busy={pending} className="space-y-4">
@@ -25,7 +26,7 @@ export function LoginForm({ locale }: { locale: StoreLocale }) {
           className={field} aria-invalid={!!result} aria-describedby={errorId} />
       </label>
       <p id="admin-login-error" role="alert">{result && t("credentials")}</p>
-      <button disabled={pending} type="submit" className="min-h-11 rounded-md bg-stone-900 px-4 text-white focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50">
+      <button disabled={pending} type="submit" className={ui.primary}>
         {t(pending ? "signingIn" : "signIn")}
       </button>
     </form>

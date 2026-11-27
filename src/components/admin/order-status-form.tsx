@@ -1,5 +1,6 @@
 "use client";
 
+import { ui } from "@/components/ui/styles";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { updateOrderStatus } from "@/app/[locale]/admin/actions";
@@ -16,15 +17,15 @@ export function OrderStatusForm({ id, status }: { id: string; status: OrderStatu
   );
 
   return (
-    <form action={action} aria-busy={pending} className="space-y-2 border-t border-stone-200 pt-4">
+    <form action={action} aria-busy={pending} className="space-y-2 border-t border-outline pt-4">
       <div className="flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1">{t("status")}
           <select name="status" defaultValue={status} disabled={pending}
-            className="min-h-11 rounded-md border border-stone-300 bg-white px-3 focus-visible:outline-2">
+            className={ui.select}>
             {orderStatuses.map((value) => <option key={value} value={value}>{t(`statuses.${value}`)}</option>)}
           </select>
         </label>
-        <button type="submit" disabled={pending} className="min-h-11 rounded-md bg-stone-900 px-4 text-white focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50">
+        <button type="submit" disabled={pending} className={ui.primary}>
           {t(pending ? "saving" : "save")}
         </button>
       </div>
